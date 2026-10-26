@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Monitoring Stok & Order Bumbu Marinade</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- HEADER BANNER -->
+  <header class="bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 text-white shadow-lg border-b border-amber-900/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center border border-amber-400/30 shadow-inner">
+            <i class="fa-solid fa-box-open text-2xl text-amber-400"></i>
+          </div>
+          <div>
+            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+              Monitoring & Planning Bumbu Marinade
+              <span class="bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs px-2.5 py-0.5 rounded-full font-semibold">1 Pack = 10 Ekor</span>
+            </h1>
+            <p class="text-xs sm:text-sm text-amber-200/80 mt-0.5">Sistem Kalkulasi Stok Awal, Kebutuhan Ayam, Sisa Stok & Order Dus (1 Dus = 20 Pack)</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 text-xs">
+          <div class="px-3 py-1.5 rounded-lg bg-amber-600/30 text-amber-200 border border-amber-500/30 font-medium">
+            <i class="fa-solid fa-store text-amber-400 mr-1.5"></i> <span id="statStoreCount">64</span> Store Terdaftar
+          </div>
+          <div class="px-3 py-1.5 rounded-lg bg-slate-700/50 text-slate-300 font-medium">
+            <i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> Min Safety Stock: 8 Pack
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+
+    <!-- FORM & RESULT DASHBOARD -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- INPUT FORM SECTION -->
+      <div class="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-500"></div>
+
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 bg-amber-100 text-amber-800 rounded-lg flex items-center justify-center font-bold text-sm">1</span>
+            <h2 class="text-lg font-bold text-slate-900">Form Input Monitoring Marinade</h2>
+          </div>
+          <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-md">Excel Sheet Connected</span>
+        </div>
+
+        <form id="marinadeForm" onsubmit="processMarinadeOrder(event)" class="space-y-4">
+          
+          <!-- 1. Pilihan Store -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+              1. Nama Store <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative">
+              <input type="text" id="inputStoreName" list="storeDatalist" placeholder="Ketik atau pilih nama store (Contoh: AGS JOMBANG PLOSO)" required
+                     onchange="onStoreSelect(this.value)"
+                     class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all font-bold text-slate-800">
+              <i class="fa-solid fa-shop absolute left-3.5 top-3 text-slate-400"></i>
+            </div>
+            <datalist id="storeDatalist"></datalist>
+          </div>
+
+          <!-- 2. Periode Bulan -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                2. Periode Bulan <span class="text-rose-500">*</span>
+              </label>
+              <select id="inputMonth" required
+                      class="w-full py-2.5 px-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 font-semibold text-slate-800">
+                <option value="November 2026" selected>November 2026</option>
+                <option value="Oktober 2026">Oktober 2026</option>
+                <option value="Desember 2026">Desember 2026</option>
+                <option value="Januari 2027">Januari 2027</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                3. Stok Awal Marinade (Pack)
+              </label>
+              <div class="relative">
+                <input type="number" id="inputStokAwal" min="0" placeholder="0" required
+                       class="w-full pl-9 pr-12 py-2.5 text-sm bg-amber-50/50 border border-amber-300 rounded-xl font-extrabold text-amber-900">
+                <i class="fa-solid fa-boxes-stacked absolute left-3 top-3 text-amber-500"></i>
+                <span class="absolute right-3 top-2.5 text-xs font-bold text-amber-600">PACK</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Rincian Pengiriman Ayam Dalam Bulan Ini -->
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-truck-ramp-box text-indigo-600"></i>
+                Pembelian / Kiriman Ayam Minggu 1 - 4
+              </label>
+              <span class="text-[11px] font-bold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded">Satuan: Ekor</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div>
+                <span class="text-[10px] text-slate-500 font-semibold block mb-1">Minggu 1</span>
+                <input type="number" id="ship1" min="0" value="0" step="10" oninput="calculateTotalAyam()" placeholder="0"
+                       class="w-full py-2 px-2.5 text-xs bg-white border border-slate-300 rounded-lg text-center font-bold text-slate-800">
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 font-semibold block mb-1">Minggu 2</span>
+                <input type="number" id="ship2" min="0" value="0" step="10" oninput="calculateTotalAyam()" placeholder="0"
+                       class="w-full py-2 px-2.5 text-xs bg-white border border-slate-300 rounded-lg text-center font-bold text-slate-800">
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 font-semibold block mb-1">Minggu 3</span>
+                <input type="number" id="ship3" min="0" value="0" step="10" oninput="calculateTotalAyam()" placeholder="0"
+                       class="w-full py-2 px-2.5 text-xs bg-white border border-slate-300 rounded-lg text-center font-bold text-slate-800">
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 font-semibold block mb-1">Minggu 4</span>
+                <input type="number" id="ship4" min="0" value="0" step="10" oninput="calculateTotalAyam()" placeholder="0"
+                       class="w-full py-2 px-2.5 text-xs bg-white border border-slate-300 rounded-lg text-center font-bold text-slate-800">
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+              <span class="text-xs font-bold text-slate-600">Total Pembelian Ayam Bulan Ini:</span>
+              <span id="displayTotalAyam" class="text-sm font-black text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-lg">0 Ekor</span>
+            </div>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <button type="submit" 
+                  class="w-full bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white font-bold py-3.5 px-6 rounded-xl shadow-md hover:shadow-amber-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-calculator text-amber-200"></i>
+            <span>Kalkulasi Kebutuhan & Simpan Order</span>
+          </button>
+
+        </form>
+      </div>
+
+      <!-- LIVE RESULT & CALCULATION CARD -->
+      <div class="lg:col-span-6 space-y-6">
+        
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 relative">
+          
+          <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 bg-indigo-100 text-indigo-700 rounded-lg flex items-center justify-center font-bold text-sm">2</span>
+              <div>
+                <h2 class="text-lg font-bold text-slate-900">Hasil Analisis & Rekomendasi Order</h2>
+                <p id="resStoreSubtitle" class="text-xs text-slate-500">Pilih store di sebelah kiri untuk melihat estimasi.</p>
+              </div>
+            </div>
+            <span id="statusBadge" class="hidden text-xs font-extrabold px-3 py-1 rounded-full border"></span>
+          </div>
+
+          <!-- SUMMARY METRICS GRID -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+            
+            <!-- Needed Pack -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5">
+              <span class="text-[11px] font-semibold text-slate-500 block">Kebutuhan Marinade</span>
+              <div class="text-xl font-black text-slate-900 my-0.5" id="resPemakaianPack">0 <span class="text-xs font-medium text-slate-500">pack</span></div>
+              <span class="text-[10px] text-slate-400">Total Ayam / 10</span>
+            </div>
+
+            <!-- Remaining Stock -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5">
+              <span class="text-[11px] font-semibold text-slate-500 block">Estimasi Sisa Stok</span>
+              <div class="text-xl font-black text-slate-900 my-0.5" id="resSisaStok">0 <span class="text-xs font-medium text-slate-500">pack</span></div>
+              <span class="text-[10px] text-slate-400">Target Spare: 6-8 Pack</span>
+            </div>
+
+            <!-- Order Recommendation -->
+            <div class="col-span-2 sm:col-span-1 bg-gradient-to-br from-amber-500 to-amber-700 text-white rounded-xl p-3.5 shadow-sm">
+              <span class="text-[11px] font-semibold text-amber-100 block">Rekomendasi Order</span>
+              <div class="text-2xl font-black my-0.5" id="resOrderDus">0 DUS</div>
+              <span class="text-[10px] text-amber-200" id="resOrderPack">(0 Pack Marinade)</span>
+            </div>
+
+          </div>
+
+          <!-- CALCULATION FORMULA EXPLANATION -->
+          <div class="bg-amber-50/60 rounded-xl p-4 border border-amber-200/80 space-y-2.5">
+            <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-info text-amber-600"></i>
+              Aturan Sistem Kriteria Order
+            </h4>
+            <ul class="text-xs text-amber-900/80 space-y-1.5 list-disc list-inside font-medium">
+              <li><strong>1 Pack Marinade</strong> dipakai untuk membumbui <strong>10 ekor ayam</strong>.</li>
+              <li><strong>1 Dus Marinade</strong> berisi <strong>20 Pack</strong> bumbu.</li>
+              <li><strong>Standard Safety Stock:</strong> Minimal sisa stok per store adalah <strong>8 pack</strong>.</li>
+              <li>Jika Sisa Stok <strong>&lt; 8 pack</strong> $\rightarrow$ Otomatis di-orderkan <strong>1 Dus (20 Pack)</strong>.</li>
+              <li>Jika Sisa Stok minus berat ($\le -12$ pack) $\rightarrow$ Kelipatan order bertambah menjadi <strong>2 Dus (40 Pack)</strong> untuk mengamankan stok operasional.</li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RECAP TABLE & HISTORY -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 space-y-6">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div>
+          <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-list text-amber-600"></i>
+            Rekapitulasi Order & Monitoring Bumbu Marinade
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">Daftar laporan stok awal, pembelian ayam, sisa stok akhir, dan total order dus.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-slate-500 uppercase mr-1">Filter Bulan:</span>
+          <div id="monthFilterContainer" class="flex flex-wrap items-center gap-1.5">
+            <!-- Dynamic month buttons -->
+          </div>
+
+          <button onclick="clearAllData()" class="ml-2 text-xs text-rose-600 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-lg border border-rose-200 font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-trash-can"></i> Reset Data
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left text-xs text-slate-700 border-collapse">
+          <thead>
+            <tr class="bg-slate-900 text-white font-bold tracking-wide">
+              <th class="py-3 px-3.5 rounded-l-lg">No</th>
+              <th class="py-3 px-3.5">Nama Store</th>
+              <th class="py-3 px-3.5 text-center">Bulan</th>
+              <th class="py-3 px-3.5 text-center">Stok Awal (Pack)</th>
+              <th class="py-3 px-3.5 text-right">Pembelian Ayam</th>
+              <th class="py-3 px-3.5 text-center">Butuh Bumbu (Pack)</th>
+              <th class="py-3 px-3.5 text-center">Sisa Stok (Pack)</th>
+              <th class="py-3 px-3.5 text-center bg-amber-800 text-amber-100">Order (Dus)</th>
+              <th class="py-3 px-3.5 text-center">Order (Pack)</th>
+              <th class="py-3 px-3.5 text-center">Status</th>
+              <th class="py-3 px-3.5 text-center rounded-r-lg">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="recapTableBody" class="divide-y divide-slate-100 font-medium">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- FOOTER RECAP STATS -->
+      <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <div class="flex items-center gap-6">
+          <div>
+            <span class="text-slate-500">Total Store Terdata:</span>
+            <span id="statTotalStoreRecap" class="font-extrabold text-slate-900 ml-1">0 Store</span>
+          </div>
+          <div>
+            <span class="text-slate-500">Total Ayam Diproses:</span>
+            <span id="statTotalAyamRecap" class="font-extrabold text-indigo-700 ml-1">0 Ekor</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <span class="text-slate-600">Total Order Marinade:</span>
+          <span id="statTotalDusRecap" class="text-sm font-black text-amber-700 bg-amber-100 border border-amber-300 px-3 py-1 rounded-lg">0 DUS (0 Pack)</span>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center space-y-1">
+      <p class="font-semibold text-slate-300">Aplikasi Monitoring Stok & Auto-Order Bumbu Marinade © 2026</p>
+      <p class="text-slate-500">Integrated with 64 Store Dataset from Sheet Marinade Monitoring</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // 1. DATASET 64 STORE DARI SHEET MARINADE EXCEL (DEFAULTS STOK AWAL & AYAM)
+    const MARINADE_STORE_DATA = [
+      {"name": "AGS JOMBANG PLOSO", "stokAwal": 26, "ayamAwal": 280},
+      {"name": "AGS PASURUAN indragiri", "stokAwal": 16, "ayamAwal": 160},
+      {"name": "AGS TEGAL BESAR JEMBER", "stokAwal": 20, "ayamAwal": 80},
+      {"name": "AGS JOMBANG MOJOAGUNG", "stokAwal": 10, "ayamAwal": 280},
+      {"name": "AGS PASURUAN BUGUL", "stokAwal": 16, "ayamAwal": 160},
+      {"name": "AGS JEMBER BALUNG", "stokAwal": 12, "ayamAwal": 160},
+      {"name": "AGS JOMBANG RE", "stokAwal": 10, "ayamAwal": 280},
+      {"name": "AGS PASURUAN GONDANG WETAN", "stokAwal": 8, "ayamAwal": 160},
+      {"name": "AGS JEMBER PUGER", "stokAwal": 34, "ayamAwal": 0},
+      {"name": "AGS JOMBANG H.A", "stokAwal": 10, "ayamAwal": 280},
+      {"name": "AGS PASURUAN PANGSUD 2", "stokAwal": 20, "ayamAwal": 160},
+      {"name": "AGS JEMBER KARIMATA", "stokAwal": 20, "ayamAwal": 80},
+      {"name": "AGS JOMBANG DR SUTOMO", "stokAwal": 10, "ayamAwal": 280},
+      {"name": "AGS PASURUAN BANGIL", "stokAwal": 8, "ayamAwal": 80},
+      {"name": "AGS JEMBER MASTRIP", "stokAwal": 2, "ayamAwal": 80},
+      {"name": "AGS JOMBANG adityawarman", "stokAwal": 10, "ayamAwal": 300},
+      {"name": "AGS WARUNG DOWO PASURUAN", "stokAwal": 18, "ayamAwal": 160},
+      {"name": "AGS JEMBER KALISAT", "stokAwal": 20, "ayamAwal": 80},
+      {"name": "AGS TAMBAKREJO jombang", "stokAwal": 26, "ayamAwal": 200},
+      {"name": "AGS WONOREJO PASURUAN", "stokAwal": 8, "ayamAwal": 80},
+      {"name": "AGS BONDOWOSO", "stokAwal": 34, "ayamAwal": 80},
+      {"name": "AGS KALITENGAH pandaan", "stokAwal": 8, "ayamAwal": 100},
+      {"name": "AGS LUMAJANG PASIRIAN", "stokAwal": 16, "ayamAwal": 340},
+      {"name": "AGS PAHLAWAN", "stokAwal": 14, "ayamAwal": 400},
+      {"name": "AGS PASURUAN GUNUNG GANGSIR", "stokAwal": 4, "ayamAwal": 80},
+      {"name": "AGS LUMAJANG GHOZALI", "stokAwal": 74, "ayamAwal": 210},
+      {"name": "AGS HAYAM WURUK", "stokAwal": 14, "ayamAwal": 300},
+      {"name": "AGS GRESIK CERME lamongan", "stokAwal": 24, "ayamAwal": 0},
+      {"name": "AGS SITUBONDO", "stokAwal": 4, "ayamAwal": 130},
+      {"name": "AGS VETERAN", "stokAwal": 8, "ayamAwal": 500},
+      {"name": "AGS BESUKI", "stokAwal": 12, "ayamAwal": 160},
+      {"name": "AGS DIPONEGORO", "stokAwal": 14, "ayamAwal": 200},
+      {"name": "AGS SEMANDING", "stokAwal": 14, "ayamAwal": 200},
+      {"name": "AGS KALIJOGO", "stokAwal": 20, "ayamAwal": 400},
+      {"name": "AGS BALEN", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS BAURNO", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS SROYO", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS PONCO", "stokAwal": 16, "ayamAwal": 240},
+      {"name": "AGS VETERAN bojonegoro", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS GIANT bojonegoro", "stokAwal": 16, "ayamAwal": 200},
+      {"name": "AGS POLIM bojonegoro", "stokAwal": 16, "ayamAwal": 200},
+      {"name": "AGS DANDER bojonegoro", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS NGANJUK", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS NGANJUK BREBEK", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS NGANJUK A.YANI", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS AR.SALEH NGANJUK", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS PONOROGO", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MAGETAN jl.panglima sudirman", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MAGETAN monginsidi", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MADIUN MARHADI", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MAGETAN mt haryono", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MAGETAN temboro", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS SUNAN DRAJAT lamongan", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS VETERAN lamongan", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS BABAT gotongroyong", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS Tulangan Sidoarjo", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS BANARAN babat", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS WIDANG tuban", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS TANGGULREJO babat", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS BEJI TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS NGUNUT TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS TEUKU UMAR TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS WATES KEDIRI", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MOJOKERTO MERI", "stokAwal": 20, "ayamAwal": 200}
+    ];
+
+    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData') || '[]');
+    let currentFilterMonth = 'ALL';
+
+    document.addEventListener("DOMContentLoaded", () => {
+      populateDatalist();
+      renderRecapTable();
+
+      // Auto select first store
+      if (MARINADE_STORE_DATA.length > 0) {
+        document.getElementById("inputStoreName").value = MARINADE_STORE_DATA[0].name;
+        onStoreSelect(MARINADE_STORE_DATA[0].name);
+      }
+    });
+
+    function populateDatalist() {
+      const datalist = document.getElementById("storeDatalist");
+      datalist.innerHTML = MARINADE_STORE_DATA.map(s => `<option value="${s.name}">Stok Awal: ${s.stokAwal} Pack</option>`).join('');
+      document.getElementById("statStoreCount").textContent = MARINADE_STORE_DATA.length;
+    }
+
+    function onStoreSelect(storeName) {
+      const match = MARINADE_STORE_DATA.find(s => s.name.trim().toLowerCase() === storeName.trim().toLowerCase());
+      if (match) {
+        document.getElementById("inputStokAwal").value = match.stokAwal;
+        // Split baseline ayam into 4 weeks
+        const perWeek = Math.round((match.ayamAwal / 4) / 10) * 10;
+        document.getElementById("ship1").value = perWeek;
+        document.getElementById("ship2").value = perWeek;
+        document.getElementById("ship3").value = perWeek;
+        document.getElementById("ship4").value = match.ayamAwal - (perWeek * 3);
+        calculateTotalAyam();
+      }
+    }
+
+    function calculateTotalAyam() {
+      const s1 = parseInt(document.getElementById("ship1").value) || 0;
+      const s2 = parseInt(document.getElementById("ship2").value) || 0;
+      const s3 = parseInt(document.getElementById("ship3").value) || 0;
+      const s4 = parseInt(document.getElementById("ship4").value) || 0;
+
+      const total = s1 + s2 + s3 + s4;
+      document.getElementById("displayTotalAyam").textContent = `${total.toLocaleString('id-ID')} Ekor`;
+      return total;
+    }
+
+    // PROCESS MARINADE CALCULATION & AUTO ORDER
+    function processMarinadeOrder(e) {
+      e.preventDefault();
+
+      const storeName = document.getElementById("inputStoreName").value.trim();
+      const month = document.getElementById("inputMonth").value;
+      const stokAwal = parseInt(document.getElementById("inputStokAwal").value) || 0;
+      const totalAyam = calculateTotalAyam();
+
+      if (!storeName) {
+        alert("Pilih atau masukkan nama store terlebih dahulu!");
+        return;
+      }
+
+      // 1. Pack Marinade Used (1 Pack = 10 Ekor Ayam)
+      const packUsed = Math.ceil(totalAyam / 10);
+
+      // 2. Remaining Stock End of Month
+      const sisaStok = stokAwal - packUsed;
+
+      // 3. Auto Order Criterion:
+      // Safety threshold: sisaStok < 8 pack -> order 1 Dus (20 pack).
+      // If sisaStok is heavily negative (<= -12), order 2 Dus (40 pack) to restore safety stock above 6-8 pack.
+      let orderDus = 0;
+      if (sisaStok < 8) {
+        if (sisaStok <= -12) {
+          orderDus = Math.ceil((8 - sisaStok) / 20);
+        } else {
+          orderDus = 1;
+        }
+      }
+
+      const orderPack = orderDus * 20;
+
+      // Status
+      let statusText = "STOK AMAN";
+      let statusClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
+
+      if (sisaStok < 0) {
+        statusText = "DEFISIT / MINUS";
+        statusClass = "bg-rose-100 text-rose-800 border-rose-300";
+      } else if (sisaStok < 8) {
+        statusText = "KRITIS (< 8 PACK)";
+        statusClass = "bg-amber-100 text-amber-800 border-amber-300";
+      }
+
+      // Update UI Result
+      document.getElementById("resStoreSubtitle").textContent = `${storeName} (${month})`;
+      const badge = document.getElementById("statusBadge");
+      badge.textContent = statusText;
+      badge.className = `text-xs font-extrabold px-3 py-1 rounded-full border ${statusClass}`;
+      badge.classList.remove("hidden");
+
+      document.getElementById("resPemakaianPack").innerHTML = `${packUsed} <span class="text-xs font-medium text-slate-500">pack</span>`;
+      document.getElementById("resSisaStok").innerHTML = `${sisaStok} <span class="text-xs font-medium text-slate-500">pack</span>`;
+      document.getElementById("resOrderDus").textContent = `${orderDus} DUS`;
+      document.getElementById("resOrderPack").textContent = `(${orderPack} Pack Marinade)`;
+
+      // Save Data Record
+      const newRecord = {
+        id: Date.now(),
+        storeName: storeName,
+        month: month,
+        stokAwal: stokAwal,
+        totalAyam: totalAyam,
+        packUsed: packUsed,
+        sisaStok: sisaStok,
+        orderDus: orderDus,
+        orderPack: orderPack,
+        statusText: statusText,
+        statusClass: statusClass,
+        ship1: parseInt(document.getElementById("ship1").value) || 0,
+        ship2: parseInt(document.getElementById("ship2").value) || 0,
+        ship3: parseInt(document.getElementById("ship3").value) || 0,
+        ship4: parseInt(document.getElementById("ship4").value) || 0
+      };
+
+      const existingIdx = marinadeOrdersList.findIndex(i => i.storeName.toLowerCase() === storeName.toLowerCase() && i.month === month);
+      if (existingIdx >= 0) {
+        marinadeOrdersList[existingIdx] = newRecord;
+      } else {
+        marinadeOrdersList.unshift(newRecord);
+      }
+
+      localStorage.setItem('marinadeOrdersData', JSON.stringify(marinadeOrdersList));
+      renderRecapTable();
+    }
+
+    // RENDER RECAP TABLE
+    function renderRecapTable() {
+      const months = Array.from(new Set(marinadeOrdersList.map(i => i.month)));
+      const filterContainer = document.getElementById("monthFilterContainer");
+
+      let btnsHTML = `<button onclick="setFilterMonth('ALL')" class="text-xs px-3 py-1.5 rounded-lg border font-semibold transition-all ${currentFilterMonth === 'ALL' ? 'bg-amber-600 text-white border-amber-600' : 'bg-slate-100 text-slate-700 border-slate-200'}">Semua</button>`;
+      months.forEach(m => {
+        btnsHTML += `<button onclick="setFilterMonth('${m}')" class="text-xs px-3 py-1.5 rounded-lg border font-semibold transition-all ${currentFilterMonth === m ? 'bg-amber-600 text-white border-amber-600' : 'bg-slate-100 text-slate-700 border-slate-200'}">${m}</button>`;
+      });
+      filterContainer.innerHTML = btnsHTML;
+
+      const filtered = currentFilterMonth === 'ALL' ? marinadeOrdersList : marinadeOrdersList.filter(i => i.month === currentFilterMonth);
+      const tbody = document.getElementById("recapTableBody");
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="11" class="py-8 text-center text-slate-400 font-normal">
+              <i class="fa-solid fa-box-open text-2xl mb-2 block text-slate-300"></i>
+              Belum ada data monitoring marinade tersimpan. Silakan isi form di atas.
+            </td>
+          </tr>
+        `;
+        document.getElementById("statTotalStoreRecap").textContent = "0 Store";
+        document.getElementById("statTotalAyamRecap").textContent = "0 Ekor";
+        document.getElementById("statTotalDusRecap").textContent = "0 DUS (0 Pack)";
+        return;
+      }
+
+      let sumAyam = 0;
+      let sumDus = 0;
+      let sumPackOrder = 0;
+
+      let rows = "";
+      filtered.forEach((item, idx) => {
+        sumAyam += item.totalAyam;
+        sumDus += item.orderDus;
+        sumPackOrder += item.orderPack;
+
+        rows += `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="py-3 px-3.5 text-slate-400 font-bold">${idx + 1}</td>
+            <td class="py-3 px-3.5 font-bold text-slate-900">${item.storeName}</td>
+            <td class="py-3 px-3.5 text-center font-semibold text-slate-600">${item.month}</td>
+            <td class="py-3 px-3.5 text-center font-bold text-amber-900 bg-amber-50/30">${item.stokAwal}</td>
+            <td class="py-3 px-3.5 text-right font-black text-slate-900">${item.totalAyam.toLocaleString('id-ID')} ekor</td>
+            <td class="py-3 px-3.5 text-center font-bold text-slate-700">${item.packUsed}</td>
+            <td class="py-3 px-3.5 text-center font-bold ${item.sisaStok < 8 ? 'text-rose-600 font-black' : 'text-slate-800'}">${item.sisaStok}</td>
+            <td class="py-3 px-3.5 text-center font-black text-amber-900 bg-amber-100">${item.orderDus} DUS</td>
+            <td class="py-3 px-3.5 text-center font-bold text-amber-700">${item.orderPack} pack</td>
+            <td class="py-3 px-3.5 text-center">
+              <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${item.statusClass}">${item.statusText}</span>
+            </td>
+            <td class="py-3 px-3.5 text-center">
+              <button onclick="deleteRecord(${item.id})" class="w-7 h-7 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center mx-auto">
+                <i class="fa-solid fa-trash text-xs"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = rows;
+      document.getElementById("statTotalStoreRecap").textContent = `${filtered.length} Store`;
+      document.getElementById("statTotalAyamRecap").textContent = `${sumAyam.toLocaleString('id-ID')} Ekor`;
+      document.getElementById("statTotalDusRecap").textContent = `${sumDus} DUS (${sumPackOrder} Pack)`;
+    }
+
+    function setFilterMonth(m) {
+      currentFilterMonth = m;
+      renderRecapTable();
+    }
+
+    function deleteRecord(id) {
+      if (confirm("Hapus catatan monitoring ini?")) {
+        marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
+        localStorage.setItem('marinadeOrdersData', JSON.stringify(marinadeOrdersList));
+        renderRecapTable();
+      }
+    }
+
+    function clearAllData() {
+      if (confirm("Reset seluruh data monitoring marinade tersimpan?")) {
+        marinadeOrdersList = [];
+        localStorage.removeItem('marinadeOrdersData');
+        renderRecapTable();
+      }
+    }
+  </script>
+</body>
+</html>
