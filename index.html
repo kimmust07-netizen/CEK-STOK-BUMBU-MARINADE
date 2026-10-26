@@ -12,161 +12,331 @@
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .card-shadow { box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05); }
+    .input-focus { transition: all 0.2s ease-in-out; }
+    .input-focus:focus { transform: translateY(-1px); }
   </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col">
 
-  <!-- HEADER -->
-  <header class="bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 text-white shadow-lg border-b border-amber-900/40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
+  <!-- HEADER NAVBAR -->
+  <header class="bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 text-white shadow-xl border-b border-amber-900/40 sticky top-0 z-30 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
-        <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center border border-amber-400/30">
+        <div class="w-12 h-12 bg-amber-500/20 rounded-2xl flex items-center justify-center border border-amber-400/30 shadow-inner">
           <i class="fa-solid fa-box-open text-2xl text-amber-400"></i>
         </div>
         <div>
           <h1 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
-            Monitoring & Planning Bumbu Marinade
-            <span class="bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs px-2.5 py-0.5 rounded-full font-semibold">Max 10x Kirim</span>
+            Monitoring Bumbu Marinade
+            <span class="bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs px-2.5 py-0.5 rounded-full font-semibold">1 Pack = 10 Ekor</span>
           </h1>
-          <p class="text-xs sm:text-sm text-amber-200/80">Input Kiriman Fleksibel (4x, 5x, 8x s/d 10x) & Integration Ready</p>
+          <p class="text-xs text-amber-200/80">Input Fleksibel 4x - 10x Kirim & Integration Ready Google Sheets</p>
         </div>
       </div>
-      <div class="flex items-center gap-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700 text-xs">
-        <div class="px-3 py-1.5 rounded-lg bg-amber-600/30 text-amber-200 font-medium">
-          <i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> Target Spare: 6 - 8 Pack
+
+      <div class="flex items-center gap-3 bg-slate-800/80 p-2 rounded-2xl border border-slate-700/80 text-xs shadow-inner">
+        <div class="px-3 py-1.5 rounded-xl bg-amber-600/30 text-amber-200 font-semibold border border-amber-500/30">
+          <i class="fa-solid fa-store text-amber-400 mr-1.5"></i> <span id="statStoreCount">64</span> Store Loaded
+        </div>
+        <div class="px-3 py-1.5 rounded-xl bg-slate-700/50 text-slate-200 font-semibold">
+          <i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> Safety Stock: 8 Pack
         </div>
       </div>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN CONTAINER -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- FORM INPUT -->
-      <div class="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 relative overflow-hidden">
-        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-500"></div>
+      <!-- FORM INPUT SECTION -->
+      <div class="lg:col-span-7 bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-7 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-600"></div>
 
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-          <div class="flex items-center gap-2.5">
-            <span class="w-8 h-8 bg-amber-100 text-amber-800 rounded-lg flex items-center justify-center font-bold text-sm">1</span>
-            <h2 class="text-lg font-bold text-slate-900">Form Input Monitoring Marinade</h2>
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 bg-amber-100 text-amber-800 rounded-xl flex items-center justify-center font-extrabold text-sm">1</span>
+            <div>
+              <h2 class="text-lg font-extrabold text-slate-900">Form Monitoring Marinade</h2>
+              <p class="text-xs text-slate-400">Isi data stok dan rincian pengiriman ayam</p>
+            </div>
           </div>
-          <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-md">64 Store Connected</span>
+          <span class="text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200/80 px-3 py-1 rounded-full">Automated Calculation</span>
         </div>
 
-        <form id="marinadeForm" onsubmit="processMarinadeOrder(event)" class="space-y-4">
+        <form id="marinadeForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
           
-          <!-- Store Selection -->
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">1. Nama Store <span class="text-rose-500">*</span></label>
-            <input type="text" id="inputStoreName" list="storeDatalist" placeholder="Ketik / pilih store..." required onchange="onStoreSelect(this.value)"
-                   class="w-full pl-4 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800 focus:ring-2 focus:ring-amber-500">
-            <datalist id="storeDatalist"></datalist>
+          <!-- Store & Month Input -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">1. Nama Store <span class="text-rose-500">*</span></label>
+              <div class="relative">
+                <input type="text" id="inputStoreName" list="storeDatalist" placeholder="Ketik/Pilih Nama Store..." required onchange="onStoreSelect(this.value)"
+                       class="input-focus w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
+                <i class="fa-solid fa-shop absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+              </div>
+              <datalist id="storeDatalist"></datalist>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">2. Periode Bulan *</label>
+              <div class="relative">
+                <select id="inputMonth" required class="input-focus w-full pl-9 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-300 rounded-2xl font-semibold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
+                  <option value="November 2026" selected>November 2026</option>
+                  <option value="Oktober 2026">Oktober 2026</option>
+                  <option value="Desember 2026">Desember 2026</option>
+                  <option value="Januari 2027">Januari 2027</option>
+                </select>
+                <i class="fa-solid fa-calendar-days absolute left-3 top-3.5 text-slate-400 text-sm"></i>
+              </div>
+            </div>
           </div>
 
-          <!-- Month & Initial Stock -->
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">2. Periode Bulan</label>
-              <select id="inputMonth" required class="w-full py-2.5 px-3 text-sm bg-slate-50 border border-slate-300 rounded-xl font-semibold">
-                <option value="November 2026" selected>November 2026</option>
-                <option value="Oktober 2026">Oktober 2026</option>
-                <option value="Desember 2026">Desember 2026</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">3. Stok Awal (Pack)</label>
-              <input type="number" id="inputStokAwal" min="0" placeholder="0" required class="w-full py-2.5 px-3 text-sm bg-amber-50/50 border border-amber-300 rounded-xl font-extrabold text-amber-900">
+          <!-- Initial Stock Input -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">3. Stok Awal Marinade (Pack) <span class="text-rose-500">*</span></label>
+            <div class="relative">
+              <input type="number" id="inputStokAwal" min="0" placeholder="0" required 
+                     class="input-focus w-full pl-10 pr-16 py-2.5 text-sm bg-amber-50/60 border border-amber-300 rounded-2xl font-black text-amber-900 focus:bg-white focus:ring-2 focus:ring-amber-500">
+              <i class="fa-solid fa-boxes-stacked absolute left-3.5 top-3.5 text-amber-600 text-sm"></i>
+              <span class="absolute right-3.5 top-2.5 text-xs font-bold text-amber-700 bg-amber-200/60 px-2 py-1 rounded-lg">PACK</span>
             </div>
           </div>
 
           <!-- Dynamic Shipments Section (Up to 10) -->
-          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-            <div class="flex items-center justify-between">
-              <label class="text-xs font-bold text-slate-800 uppercase tracking-wider">Frekuensi Kirim Bulan Ini:</label>
+          <div class="bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200/80 space-y-3.5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <label class="text-xs font-extrabold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-truck-ramp-box text-indigo-600"></i>
+                Jadwal Pengiriman Ayam (Max 10x Kirim)
+              </label>
+              
               <div class="flex items-center gap-2">
-                <select id="shipmentCountSelect" onchange="adjustShipmentColumns(this.value)" class="text-xs py-1 px-2 border border-slate-300 rounded-lg bg-white font-bold text-indigo-700">
+                <select id="shipmentCountSelect" onchange="adjustShipmentColumns(this.value)" class="text-xs py-1.5 px-2.5 border border-slate-300 rounded-xl bg-white font-bold text-indigo-700 shadow-sm focus:ring-2 focus:ring-indigo-500">
                   <option value="4">4x Kirim</option>
                   <option value="5">5x Kirim</option>
                   <option value="8">8x Kirim</option>
                   <option value="10">10x Kirim (Max)</option>
                 </select>
-                <button type="button" onclick="addShipmentColumn()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded-lg border border-indigo-200 font-bold">
-                  + Tambah
+                <button type="button" onclick="addShipmentColumn()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs px-2.5 py-1.5 rounded-xl border border-indigo-200/80 font-bold transition-all">
+                  <i class="fa-solid fa-plus mr-1"></i>Tambah
                 </button>
               </div>
             </div>
 
-            <!-- Dynamic Inputs Container -->
-            <div id="shipmentInputsGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            <!-- Dynamic Inputs Grid -->
+            <div id="shipmentInputsGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
               <!-- Dynamically populated via JS -->
             </div>
 
-            <div class="flex items-center justify-between pt-2 border-t border-slate-200">
-              <span class="text-xs font-bold text-slate-600">Total Pembelian Ayam:</span>
-              <span id="displayTotalAyam" class="text-sm font-black text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-lg">0 Ekor</span>
+            <div class="flex items-center justify-between pt-3 border-t border-slate-200/80">
+              <span class="text-xs font-bold text-slate-600">Total Pembelian Ayam Bulan Ini:</span>
+              <span id="displayTotalAyam" class="text-sm font-black text-indigo-700 bg-indigo-50 border border-indigo-200 px-3.5 py-1 rounded-xl">0 Ekor</span>
             </div>
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
-            <i class="fa-solid fa-calculator text-amber-200"></i> Hitung Sisa Stok & Order Dus
+          <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-amber-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-calculator text-amber-200"></i>
+            <span id="btnSubmitText">Kalkulasi Sisa Stok & Order Dus</span>
           </button>
         </form>
       </div>
 
-      <!-- RESULTS -->
-      <div class="lg:col-span-6 space-y-6">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6">
+      <!-- RESULTS & DASHBOARD CARD -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <div class="bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-7 relative">
           <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
             <div>
-              <h2 class="text-lg font-bold text-slate-900">Hasil Analisis & Auto Order</h2>
-              <p id="resStoreSubtitle" class="text-xs text-slate-500">Hasil simulasi kebutuhan marinade</p>
+              <h2 class="text-lg font-extrabold text-slate-900">Hasil Analisis Order</h2>
+              <p id="resStoreSubtitle" class="text-xs text-slate-400">Pilih store untuk simulasi otomatis</p>
             </div>
             <span id="statusBadge" class="hidden text-xs font-extrabold px-3 py-1 rounded-full border"></span>
           </div>
 
-          <div class="grid grid-cols-3 gap-3 mb-6">
-            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
-              <span class="text-[11px] font-semibold text-slate-500 block">Butuh Bumbu</span>
-              <div class="text-lg font-black text-slate-900 my-0.5" id="resPemakaianPack">0 pack</div>
+          <!-- Summary Metric Cards -->
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4">
+              <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Kebutuhan Bumbu</span>
+              <div class="text-2xl font-black text-slate-900 my-0.5" id="resPemakaianPack">0 <span class="text-xs font-semibold text-slate-400">pack</span></div>
+              <span class="text-[10px] text-slate-400 font-medium">1 Pack / 10 Ekor</span>
             </div>
-            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
-              <span class="text-[11px] font-semibold text-slate-500 block">Sisa Stok</span>
-              <div class="text-lg font-black text-slate-900 my-0.5" id="resSisaStok">0 pack</div>
-            </div>
-            <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-white rounded-xl p-3">
-              <span class="text-[11px] font-semibold text-amber-100 block">Rekomendasi Order</span>
-              <div class="text-xl font-black my-0.5" id="resOrderDus">0 DUS</div>
-              <span class="text-[10px] text-amber-200" id="resOrderPack">(0 Pack)</span>
+
+            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4">
+              <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Estimasi Sisa Stok</span>
+              <div class="text-2xl font-black text-slate-900 my-0.5" id="resSisaStok">0 <span class="text-xs font-semibold text-slate-400">pack</span></div>
+              <span class="text-[10px] text-slate-400 font-medium">Target Spare: 6-8 Pack</span>
             </div>
           </div>
+
+          <!-- Highlight Order Box -->
+          <div id="orderHighlightBox" class="bg-gradient-to-br from-amber-500 to-amber-700 text-white rounded-2xl p-5 shadow-md text-center transition-all">
+            <span class="text-xs font-bold text-amber-100 uppercase tracking-widest block">Rekomendasi Order Bulan Berikutnya</span>
+            <div class="text-3xl font-black my-1" id="resOrderDus">0 DUS</div>
+            <span class="text-xs text-amber-200 font-bold" id="resOrderPack">(0 Pack Marinade)</span>
+          </div>
+
+          <!-- Rule info -->
+          <div class="mt-5 p-4 bg-amber-50/60 rounded-2xl border border-amber-200/60 space-y-2 text-xs text-amber-900/90 font-medium">
+            <div class="flex items-center gap-1.5 font-bold text-amber-900">
+              <i class="fa-solid fa-circle-info text-amber-600"></i> Standar Kriteria Order
+            </div>
+            <p>• Sisa stok <strong>&lt; 8 pack</strong> $\rightarrow$ Otomatis di-orderkan <strong>1 Dus (20 Pack)</strong> agar persediaan aman di atas 6-8 pack.</p>
+            <p>• Sisa stok minus berat ($\le -12$ pack) $\rightarrow$ Kelipatan order menjadi <strong>2 Dus (40 Pack)</strong>.</p>
+          </div>
         </div>
+
       </div>
 
     </div>
+
+    <!-- RECAP TABLE & HISTORY -->
+    <div class="bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-7 space-y-5">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-list text-amber-600"></i> Rekapitulasi Monitoring Marinade
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Riwayat hasil inputan tersimpan otomatis di sistem</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/10">
+            <i class="fa-solid fa-file-excel"></i> Ekspor CSV Excel
+          </button>
+          <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-rose-200 transition-all">
+            <i class="fa-solid fa-trash-can mr-1"></i>Reset
+          </button>
+        </div>
+      </div>
+
+      <!-- Table Container -->
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-900 text-white font-bold tracking-wide">
+              <th class="p-3.5 rounded-l-xl">No</th>
+              <th class="p-3.5">Nama Store</th>
+              <th class="p-3.5 text-center">Bulan</th>
+              <th class="p-3.5 text-center">Stok Awal</th>
+              <th class="p-3.5 text-right">Total Ayam</th>
+              <th class="p-3.5 text-center">Butuh Bumbu</th>
+              <th class="p-3.5 text-center">Sisa Stok</th>
+              <th class="p-3.5 text-center bg-amber-800 text-amber-100">Order (Dus)</th>
+              <th class="p-3.5 text-center">Order (Pack)</th>
+              <th class="p-3.5 text-center rounded-r-xl">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="recapTableBody" class="divide-y divide-slate-100 font-medium">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </main>
 
+  <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center space-y-1">
+      <p class="font-semibold text-slate-300">Aplikasi Monitoring Stok & Order Bumbu Marinade © 2026</p>
+      <p class="text-slate-500">Integrated with 64 Store Excel Dataset & Google Sheets Script Ready</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
   <script>
+    // DATASET 64 STORE DARI SHEET MARINADE EXCEL
     const MARINADE_STORE_DATA = [
       {"name": "AGS JOMBANG PLOSO", "stokAwal": 26, "ayamAwal": 280},
       {"name": "AGS PASURUAN indragiri", "stokAwal": 16, "ayamAwal": 160},
       {"name": "AGS TEGAL BESAR JEMBER", "stokAwal": 20, "ayamAwal": 80},
       {"name": "AGS JOMBANG MOJOAGUNG", "stokAwal": 10, "ayamAwal": 280},
-      {"name": "AGS PASURUAN BUGUL", "stokAwal": 16, "ayamAwal": 160}
+      {"name": "AGS PASURUAN BUGUL", "stokAwal": 16, "ayamAwal": 160},
+      {"name": "AGS JEMBER BALUNG", "stokAwal": 12, "ayamAwal": 160},
+      {"name": "AGS JOMBANG RE", "stokAwal": 10, "ayamAwal": 280},
+      {"name": "AGS PASURUAN GONDANG WETAN", "stokAwal": 8, "ayamAwal": 160},
+      {"name": "AGS JEMBER PUGER", "stokAwal": 34, "ayamAwal": 0},
+      {"name": "AGS JOMBANG H.A", "stokAwal": 10, "ayamAwal": 280},
+      {"name": "AGS PASURUAN PANGSUD 2", "stokAwal": 20, "ayamAwal": 160},
+      {"name": "AGS JEMBER KARIMATA", "stokAwal": 20, "ayamAwal": 80},
+      {"name": "AGS JOMBANG DR SUTOMO", "stokAwal": 10, "ayamAwal": 280},
+      {"name": "AGS PASURUAN BANGIL", "stokAwal": 8, "ayamAwal": 80},
+      {"name": "AGS JEMBER MASTRIP", "stokAwal": 2, "ayamAwal": 80},
+      {"name": "AGS JOMBANG adityawarman", "stokAwal": 10, "ayamAwal": 300},
+      {"name": "AGS WARUNG DOWO PASURUAN", "stokAwal": 18, "ayamAwal": 160},
+      {"name": "AGS JEMBER KALISAT", "stokAwal": 20, "ayamAwal": 80},
+      {"name": "AGS TAMBAKREJO jombang", "stokAwal": 26, "ayamAwal": 200},
+      {"name": "AGS WONOREJO PASURUAN", "stokAwal": 8, "ayamAwal": 80},
+      {"name": "AGS BONDOWOSO", "stokAwal": 34, "ayamAwal": 80},
+      {"name": "AGS KALITENGAH pandaan", "stokAwal": 8, "ayamAwal": 100},
+      {"name": "AGS LUMAJANG PASIRIAN", "stokAwal": 16, "ayamAwal": 340},
+      {"name": "AGS PAHLAWAN", "stokAwal": 14, "ayamAwal": 400},
+      {"name": "AGS PASURUAN GUNUNG GANGSIR", "stokAwal": 4, "ayamAwal": 80},
+      {"name": "AGS LUMAJANG GHOZALI", "stokAwal": 74, "ayamAwal": 210},
+      {"name": "AGS HAYAM WURUK", "stokAwal": 14, "ayamAwal": 300},
+      {"name": "AGS GRESIK CERME lamongan", "stokAwal": 24, "ayamAwal": 0},
+      {"name": "AGS SITUBONDO", "stokAwal": 4, "ayamAwal": 130},
+      {"name": "AGS VETERAN", "stokAwal": 8, "ayamAwal": 500},
+      {"name": "AGS BESUKI", "stokAwal": 12, "ayamAwal": 160},
+      {"name": "AGS DIPONEGORO", "stokAwal": 14, "ayamAwal": 200},
+      {"name": "AGS SEMANDING", "stokAwal": 14, "ayamAwal": 200},
+      {"name": "AGS KALIJOGO", "stokAwal": 20, "ayamAwal": 400},
+      {"name": "AGS BALEN", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS BAURNO", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS SROYO", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS PONCO", "stokAwal": 16, "ayamAwal": 240},
+      {"name": "AGS VETERAN bojonegoro", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS GIANT bojonegoro", "stokAwal": 16, "ayamAwal": 200},
+      {"name": "AGS POLIM bojonegoro", "stokAwal": 16, "ayamAwal": 200},
+      {"name": "AGS DANDER bojonegoro", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS NGANJUK", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS NGANJUK BREBEK", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS NGANJUK A.YANI", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS AR.SALEH NGANJUK", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS PONOROGO", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MAGETAN jl.panglima sudirman", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MAGETAN monginsidi", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MADIUN MARHADI", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MAGETAN mt haryono", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MAGETAN temboro", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS SUNAN DRAJAT lamongan", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS VETERAN lamongan", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS BABAT gotongroyong", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS Tulangan Sidoarjo", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS BANARAN babat", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS WIDANG tuban", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS TANGGULREJO babat", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS BEJI TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS NGUNUT TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS TEUKU UMAR TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS WATES KEDIRI", "stokAwal": 20, "ayamAwal": 200},
+      {"name": "AGS MOJOKERTO MERI", "stokAwal": 20, "ayamAwal": 200}
     ];
 
+    // URL Google Apps Script milik Anda (Ganti dengan Web App Deployment URL Anda jika ada)
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdkA4xe8eLMqERKCX_aFvCZ1UvvRml2QPSJAjta2smInFZFI0UQSyaZ6fqEoDUzBQG/exec";
+
+    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v3') || '[]');
     let currentShipmentCount = 4;
 
     document.addEventListener("DOMContentLoaded", () => {
       populateDatalist();
       adjustShipmentColumns(4);
+      renderRecapTable();
+
+      if (MARINADE_STORE_DATA.length > 0) {
+        document.getElementById("inputStoreName").value = MARINADE_STORE_DATA[0].name;
+        onStoreSelect(MARINADE_STORE_DATA[0].name);
+      }
     });
 
     function populateDatalist() {
       const datalist = document.getElementById("storeDatalist");
       datalist.innerHTML = MARINADE_STORE_DATA.map(s => `<option value="${s.name}">Stok Awal: ${s.stokAwal} Pack</option>`).join('');
+      document.getElementById("statStoreCount").textContent = MARINADE_STORE_DATA.length;
     }
 
     function adjustShipmentColumns(count) {
@@ -176,10 +346,11 @@
 
       for (let i = 1; i <= currentShipmentCount; i++) {
         const div = document.createElement("div");
+        div.className = "bg-white p-2 rounded-xl border border-slate-200 text-center shadow-sm hover:border-indigo-300 transition-all";
         div.innerHTML = `
-          <span class="text-[10px] text-slate-500 font-semibold block mb-1">Kirim ${i}</span>
+          <span class="text-[10px] text-slate-500 font-bold block mb-1">Kirim ${i}</span>
           <input type="number" id="ship_${i}" min="0" value="0" step="10" oninput="calculateTotalAyam()"
-                 class="w-full py-1.5 px-2 text-xs bg-white border border-slate-300 rounded-lg text-center font-bold text-slate-800">
+                 class="w-full py-1 px-1 text-xs bg-slate-50 border border-slate-200 rounded-lg text-center font-bold text-slate-800 focus:bg-white focus:ring-1 focus:ring-indigo-500">
         `;
         grid.appendChild(div);
       }
@@ -206,11 +377,40 @@
       return total;
     }
 
-    function processMarinadeOrder(e) {
+    function onStoreSelect(val) {
+      const match = MARINADE_STORE_DATA.find(s => s.name.toLowerCase() === val.toLowerCase());
+      if (match) {
+        document.getElementById("inputStokAwal").value = match.stokAwal;
+        const perShipment = Math.round((match.ayamAwal / 4) / 10) * 10;
+        
+        // Reset shipment to 4 and fill default
+        document.getElementById("shipmentCountSelect").value = 4;
+        adjustShipmentColumns(4);
+        
+        document.getElementById("ship_1").value = perShipment;
+        document.getElementById("ship_2").value = perShipment;
+        document.getElementById("ship_3").value = perShipment;
+        document.getElementById("ship_4").value = match.ayamAwal - (perShipment * 3);
+        calculateTotalAyam();
+      }
+    }
+
+    async function handleFormSubmit(e) {
       e.preventDefault();
+      
+      const btnSubmit = document.getElementById("btnSubmit");
+      const btnSubmitText = document.getElementById("btnSubmitText");
+
+      // Set Loading UI
+      btnSubmit.disabled = true;
+      btnSubmitText.textContent = "Menghitung & Menyimpan...";
+
+      const storeName = document.getElementById("inputStoreName").value.trim();
+      const month = document.getElementById("inputMonth").value;
       const stokAwal = parseInt(document.getElementById("inputStokAwal").value) || 0;
       const totalAyam = calculateTotalAyam();
 
+      // Calculation
       const packUsed = Math.ceil(totalAyam / 10);
       const sisaStok = stokAwal - packUsed;
 
@@ -222,18 +422,141 @@
           orderDus = 1;
         }
       }
+      const orderPack = orderDus * 20;
 
-      document.getElementById("resPemakaianPack").textContent = `${packUsed} pack`;
-      document.getElementById("resSisaStok").textContent = `${sisaStok} pack`;
+      // Status
+      let statusText = "STOK AMAN";
+      let statusClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
+
+      if (sisaStok < 0) {
+        statusText = "DEFISIT / MINUS";
+        statusClass = "bg-rose-100 text-rose-800 border-rose-300";
+      } else if (sisaStok < 8) {
+        statusText = "KRITIS (< 8 PACK)";
+        statusClass = "bg-amber-100 text-amber-800 border-amber-300";
+      }
+
+      // Update Result Dashboard UI
+      document.getElementById("resStoreSubtitle").textContent = `${storeName} (${month})`;
+      const badge = document.getElementById("statusBadge");
+      badge.textContent = statusText;
+      badge.className = `text-xs font-extrabold px-3 py-1 rounded-full border ${statusClass}`;
+      badge.classList.remove("hidden");
+
+      document.getElementById("resPemakaianPack").innerHTML = `${packUsed} <span class="text-xs font-semibold text-slate-400">pack</span>`;
+      document.getElementById("resSisaStok").innerHTML = `${sisaStok} <span class="text-xs font-semibold text-slate-400">pack</span>`;
       document.getElementById("resOrderDus").textContent = `${orderDus} DUS`;
-      document.getElementById("resOrderPack").textContent = `(${orderDus * 20} Pack)`;
+      document.getElementById("resOrderPack").textContent = `(${orderPack} Pack Marinade)`;
+
+      const newRecord = {
+        id: Date.now(),
+        storeName: storeName,
+        month: month,
+        stokAwal: stokAwal,
+        totalAyam: totalAyam,
+        packUsed: packUsed,
+        sisaStok: sisaStok,
+        orderDus: orderDus,
+        orderPack: orderPack,
+        statusText: statusText,
+        statusClass: statusClass
+      };
+
+      // Upsert
+      const existingIdx = marinadeOrdersList.findIndex(i => i.storeName.toLowerCase() === storeName.toLowerCase() && i.month === month);
+      if (existingIdx >= 0) {
+        marinadeOrdersList[existingIdx] = newRecord;
+      } else {
+        marinadeOrdersList.unshift(newRecord);
+      }
+
+      localStorage.setItem('marinadeOrdersData_v3', JSON.stringify(marinadeOrdersList));
+      renderRecapTable();
+
+      // Send to Google Sheets API (Optional/Silent)
+      if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes("script.google.com")) {
+        try {
+          await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newRecord)
+          });
+        } catch (err) {
+          console.log("Google Sheets sync skipped or offline.");
+        }
+      }
+
+      btnSubmit.disabled = false;
+      btnSubmitText.textContent = "Kalkulasi Sisa Stok & Order Dus";
     }
 
-    function onStoreSelect(val) {
-      const match = MARINADE_STORE_DATA.find(s => s.name.toLowerCase() === val.toLowerCase());
-      if (match) {
-        document.getElementById("inputStokAwal").value = match.stokAwal;
+    function renderRecapTable() {
+      const tbody = document.getElementById("recapTableBody");
+      if (marinadeOrdersList.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" class="p-8 text-center text-slate-400 font-medium">
+              <i class="fa-solid fa-box-open text-3xl mb-2 block text-slate-300"></i>
+              Belum ada data tersimpan. Silakan isi form di atas.
+            </td>
+          </tr>
+        `;
+        return;
       }
+
+      let rows = "";
+      marinadeOrdersList.forEach((item, idx) => {
+        rows += `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="p-3.5 font-bold text-slate-400">${idx + 1}</td>
+            <td class="p-3.5 font-extrabold text-slate-900">${item.storeName}</td>
+            <td class="p-3.5 text-center font-semibold text-slate-600">${item.month}</td>
+            <td class="p-3.5 text-center font-bold text-amber-900 bg-amber-50/50">${item.stokAwal}</td>
+            <td class="p-3.5 text-right font-black text-slate-900">${item.totalAyam.toLocaleString('id-ID')} ekor</td>
+            <td class="p-3.5 text-center font-bold text-slate-700">${item.packUsed}</td>
+            <td class="p-3.5 text-center font-black ${item.sisaStok < 8 ? 'text-rose-600' : 'text-slate-800'}">${item.sisaStok}</td>
+            <td class="p-3.5 text-center font-black text-amber-900 bg-amber-100">${item.orderDus} DUS</td>
+            <td class="p-3.5 text-center font-bold text-amber-700">${item.orderPack} pack</td>
+            <td class="p-3.5 text-center">
+              <button onclick="deleteRecord(${item.id})" class="text-slate-400 hover:text-rose-600 p-1 rounded-lg transition-colors">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = rows;
+    }
+
+    function deleteRecord(id) {
+      if (confirm("Hapus catatan ini?")) {
+        marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
+        localStorage.setItem('marinadeOrdersData_v3', JSON.stringify(marinadeOrdersList));
+        renderRecapTable();
+      }
+    }
+
+    function clearAllData() {
+      if (confirm("Reset seluruh data rekapitulasi tersimpan?")) {
+        marinadeOrdersList = [];
+        localStorage.removeItem('marinadeOrdersData_v3');
+        renderRecapTable();
+      }
+    }
+
+    function exportToCSV() {
+      if (marinadeOrdersList.length === 0) { alert("Tidak ada data untuk diekspor!"); return; }
+      let csv = "No,Nama Store,Bulan,Stok Awal,Total Ayam,Kebutuhan Pack,Sisa Stok,Order Dus,Order Pack\n";
+      marinadeOrdersList.forEach((item, idx) => {
+        csv += `${idx + 1},"${item.storeName}",${item.month},${item.stokAwal},${item.totalAyam},${item.packUsed},${item.sisaStok},${item.orderDus},${item.orderPack}\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Rekap_Order_Bumbu_Marinade.csv";
+      link.click();
     }
   </script>
 </body>
