@@ -66,7 +66,7 @@
             <span class="w-9 h-9 bg-amber-100 text-amber-800 rounded-xl flex items-center justify-center font-extrabold text-sm">1</span>
             <div>
               <h2 class="text-lg font-extrabold text-slate-900">Form Input Order Ayam & Marinade</h2>
-              <p class="text-xs text-slate-400">Setiap supplier dilengkapi 8 slot pengiriman per bulan</p>
+              <p class="text-xs text-slate-400">Dilengkapi slot pengiriman & keterangan jadwal per supplier</p>
             </div>
           </div>
           <span class="text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200/80 px-3 py-1 rounded-full">Format 8 Kirim</span>
@@ -130,17 +130,17 @@
             </div>
           </div>
 
-          <!-- 3 SUPPLIER CONTAINER (MASING-MASING 8 KOLOM KIRIM) -->
+          <!-- 3 SUPPLIER CONTAINER (MASING-MASING 8 KOLOM KIRIM + KETERANGAN HARI) -->
           <div class="space-y-4 pt-2">
             
-            <!-- SUPPLIER 1: JAPFA (8 KIRIM) -->
+            <!-- SUPPLIER 1: JAPFA (8 KIRIM + KETERANGAN) -->
             <div class="bg-blue-50/60 p-4 rounded-2xl border border-blue-200/80 space-y-2.5">
               <div class="flex items-center justify-between">
                 <label class="text-xs font-extrabold text-blue-900 uppercase tracking-wider flex items-center gap-1.5">
                   <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
                   1. Order Ayam Supplier JAPFA (8x Pengiriman)
                 </label>
-                <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md">Basis Marinade (1 Pck/10 Ekor)</span>
+                <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md">Basis Marinade</span>
               </div>
 
               <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
@@ -153,20 +153,25 @@
                 <div><span class="text-[9px] text-slate-500 font-bold block text-center">Kirim 7</span><input type="number" id="japfa_7" min="0" value="0" oninput="calculateTotals()" class="w-full py-1 px-1 text-xs bg-white border border-blue-200 rounded text-center font-bold text-blue-900"></div>
                 <div><span class="text-[9px] text-slate-500 font-bold block text-center">Kirim 8</span><input type="number" id="japfa_8" min="0" value="0" oninput="calculateTotals()" class="w-full py-1 px-1 text-xs bg-white border border-blue-200 rounded text-center font-bold text-blue-900"></div>
               </div>
+
+              <div>
+                <input type="text" id="ket_japfa" placeholder="Keterangan Hari Pengiriman Japfa (Contoh: Senin & Kamis Pagi)..." class="w-full py-1.5 px-3 text-xs bg-white border border-blue-200 rounded-xl font-medium text-blue-900 placeholder:text-blue-300">
+              </div>
+
               <div class="flex justify-between items-center text-xs font-bold text-blue-900 pt-1">
                 <span>Total Ayam Japfa:</span>
                 <span id="displayJapfaTotal" class="bg-blue-100 px-2.5 py-0.5 rounded-lg border border-blue-300">0 Ekor</span>
               </div>
             </div>
 
-            <!-- SUPPLIER 2: AFCO (8 KIRIM) -->
+            <!-- SUPPLIER 2: AFCO (8 KIRIM + KETERANGAN) -->
             <div class="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/80 space-y-2.5">
               <div class="flex items-center justify-between">
                 <label class="text-xs font-extrabold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
                   <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                   2. Order Ayam Supplier AFCO (8x Pengiriman)
                 </label>
-                <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">Tanpa Bumbu Marinade</span>
+                <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md">Tanpa Marinade</span>
               </div>
 
               <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
@@ -179,20 +184,25 @@
                 <div><span class="text-[9px] text-slate-500 font-bold block text-center">Kirim 7</span><input type="number" id="afco_7" min="0" value="0" oninput="calculateTotals()" class="w-full py-1 px-1 text-xs bg-white border border-amber-200 rounded text-center font-bold text-amber-900"></div>
                 <div><span class="text-[9px] text-slate-500 font-bold block text-center">Kirim 8</span><input type="number" id="afco_8" min="0" value="0" oninput="calculateTotals()" class="w-full py-1 px-1 text-xs bg-white border border-amber-200 rounded text-center font-bold text-amber-900"></div>
               </div>
+
+              <div>
+                <input type="text" id="ket_afco" placeholder="Keterangan Hari Pengiriman Afco (Contoh: Selasa & Jumat)..." class="w-full py-1.5 px-3 text-xs bg-white border border-amber-200 rounded-xl font-medium text-amber-900 placeholder:text-amber-300">
+              </div>
+
               <div class="flex justify-between items-center text-xs font-bold text-amber-900 pt-1">
                 <span>Total Ayam Afco:</span>
                 <span id="displayAfcoTotal" class="bg-amber-100 px-2.5 py-0.5 rounded-lg border border-amber-300">0 Ekor</span>
               </div>
             </div>
 
-            <!-- SUPPLIER 3: DELTA (8 KIRIM) -->
+            <!-- SUPPLIER 3: DELTA (8 KIRIM + KETERANGAN) -->
             <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200/80 space-y-2.5">
               <div class="flex items-center justify-between">
                 <label class="text-xs font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
                   3. Order Ayam Supplier DELTA (8x Pengiriman)
                 </label>
-                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">Tanpa Bumbu Marinade</span>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">Tanpa Marinade</span>
               </div>
 
               <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
@@ -205,6 +215,11 @@
                 <div><span class="text-[9px] text-slate-500 font-bold block text-center">Kirim 7</span><input type="number" id="delta_7" min="0" value="0" oninput="calculateTotals()" class="w-full py-1 px-1 text-xs bg-white border border-emerald-200 rounded text-center font-bold text-emerald-900"></div>
                 <div><span class="text-[9px] text-slate-500 font-bold block text-center">Kirim 8</span><input type="number" id="delta_8" min="0" value="0" oninput="calculateTotals()" class="w-full py-1 px-1 text-xs bg-white border border-emerald-200 rounded text-center font-bold text-emerald-900"></div>
               </div>
+
+              <div>
+                <input type="text" id="ket_delta" placeholder="Keterangan Hari Pengiriman Delta (Contoh: Rabu & Sabtu)..." class="w-full py-1.5 px-3 text-xs bg-white border border-emerald-200 rounded-xl font-medium text-emerald-900 placeholder:text-emerald-300">
+              </div>
+
               <div class="flex justify-between items-center text-xs font-bold text-emerald-900 pt-1">
                 <span>Total Ayam Delta:</span>
                 <span id="displayDeltaTotal" class="bg-emerald-100 px-2.5 py-0.5 rounded-lg border border-emerald-300">0 Ekor</span>
@@ -216,7 +231,7 @@
           <!-- Submit Button -->
           <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-amber-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
             <i class="fa-solid fa-calculator text-amber-200"></i>
-            <span id="btnSubmitText">Kalkulasi Order Ayam & Marinade</span>
+            <span id="btnSubmitText">Kalkulasi & Simpan Order Ayam</span>
           </button>
         </form>
       </div>
@@ -388,7 +403,7 @@
   <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
     <div class="max-w-7xl mx-auto px-4 text-center space-y-1">
       <p class="font-semibold text-slate-300">Aplikasi Monitoring Order Ayam 3 Supplier & Marinade Japfa © 2026</p>
-      <p class="text-slate-500">Integrated with 64 Store Dataset & Google Sheets Script Ready</p>
+      <p class="text-slate-500">Integrated Auto-Save LocalStorage & Google Sheets Cloud Ready</p>
     </div>
   </footer>
 
@@ -463,7 +478,7 @@
 
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOqe6U3Ib_FKmaTcXuTUGlX087PyrOyoGPc-qp6xv5P4Pgb9HDmc4jnp_M7YNbXnPW/exec";
 
-    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v5') || '[]');
+    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v6') || '[]');
 
     document.addEventListener("DOMContentLoaded", () => {
       populateDatalist();
@@ -538,6 +553,10 @@
       const month = document.getElementById("inputMonth").value;
       const stokAwal = parseInt(document.getElementById("inputStokAwal").value) || 0;
       
+      const ketJapfa = document.getElementById("ket_japfa").value.trim() || "-";
+      const ketAfco = document.getElementById("ket_afco").value.trim() || "-";
+      const ketDelta = document.getElementById("ket_delta").value.trim() || "-";
+
       const totals = calculateTotals();
 
       const packUsed = Math.ceil(totals.japfaSum / 10);
@@ -583,6 +602,9 @@
         japfaArr: totals.japfaArr,
         afcoArr: totals.afcoArr,
         deltaArr: totals.deltaArr,
+        ketJapfa: ketJapfa,
+        ketAfco: ketAfco,
+        ketDelta: ketDelta,
         japfaQty: totals.japfaSum,
         afcoQty: totals.afcoSum,
         deltaQty: totals.deltaSum,
@@ -602,9 +624,11 @@
         marinadeOrdersList.unshift(newRecord);
       }
 
-      localStorage.setItem('marinadeOrdersData_v5', JSON.stringify(marinadeOrdersList));
+      // OTOMATIS TERSIMPAN KE LOCALSTORAGE
+      localStorage.setItem('marinadeOrdersData_v6', JSON.stringify(marinadeOrdersList));
       renderRecapTable();
 
+      // OTOMATIS TERSIMPAN KE SPREADSHEET (CLOUD)
       if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes("script.google.com")) {
         try {
           await fetch(GOOGLE_SCRIPT_URL, {
@@ -614,12 +638,12 @@
             body: JSON.stringify(newRecord)
           });
         } catch (err) {
-          console.log("Google Sheets sync skipped.");
+          console.log("Sync Google Sheets dilewati.");
         }
       }
 
       btnSubmit.disabled = false;
-      btnSubmitText.textContent = "Kalkulasi Order Ayam & Marinade";
+      btnSubmitText.textContent = "Kalkulasi & Simpan Order Ayam";
     }
 
     function renderRecapTable() {
@@ -705,7 +729,7 @@
     function deleteRecord(id) {
       if (confirm("Hapus catatan ini?")) {
         marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
-        localStorage.setItem('marinadeOrdersData_v5', JSON.stringify(marinadeOrdersList));
+        localStorage.setItem('marinadeOrdersData_v6', JSON.stringify(marinadeOrdersList));
         renderRecapTable();
       }
     }
@@ -713,19 +737,18 @@
     function clearAllData() {
       if (confirm("Reset seluruh data rekapitulasi tersimpan?")) {
         marinadeOrdersList = [];
-        localStorage.removeItem('marinadeOrdersData_v5');
+        localStorage.removeItem('marinadeOrdersData_v6');
         renderRecapTable();
       }
     }
 
-    // FUNGSI EKSPOR EXCEL FORMATTED (.XLSX) RAPI & TERTATA PER SUPPLIER
+    // FUNGSI EKSPOR EXCEL FORMATTED (.XLSX) DENGAN KOLOM KETERANGAN HARI PENGIRIMAN
     function exportToExcelFormatted() {
       if (marinadeOrdersList.length === 0) { 
         alert("Tidak ada data untuk diekspor!"); 
         return; 
       }
 
-      // 1. Susun Array Data dengan Header yang Rapi & Jelas
       const excelData = marinadeOrdersList.map((item, idx) => {
         let rowData = {
           "No": idx + 1,
@@ -734,25 +757,28 @@
           "Stok Awal Marinade (Pack)": item.stokAwal
         };
 
-        // 8 Kirim Japfa
+        // Section Japfa
         for(let i=1; i<=8; i++) {
           rowData[`Japfa Kirim ${i}`] = item.japfaArr ? (item.japfaArr[i-1] || 0) : 0;
         }
         rowData["Total Ayam Japfa (Ekor)"] = item.japfaQty;
+        rowData["Keterangan Pengiriman Japfa"] = item.ketJapfa || "-";
 
-        // 8 Kirim Afco
+        // Section Afco
         for(let i=1; i<=8; i++) {
           rowData[`Afco Kirim ${i}`] = item.afcoArr ? (item.afcoArr[i-1] || 0) : 0;
         }
         rowData["Total Ayam Afco (Ekor)"] = item.afcoQty;
+        rowData["Keterangan Pengiriman Afco"] = item.ketAfco || "-";
 
-        // 8 Kirim Delta
+        // Section Delta
         for(let i=1; i<=8; i++) {
           rowData[`Delta Kirim ${i}`] = item.deltaArr ? (item.deltaArr[i-1] || 0) : 0;
         }
         rowData["Total Ayam Delta (Ekor)"] = item.deltaQty;
+        rowData["Keterangan Pengiriman Delta"] = item.ketDelta || "-";
 
-        // Summary Akumulasi All & Order Marinade
+        // Section Summary & Recommendation
         rowData["GRAND TOTAL AYAM (Ekor)"] = item.totalAyam;
         rowData["Marinade Terpakai (Pack)"] = item.packUsed;
         rowData["Sisa Stok Marinade (Pack)"] = item.sisaStok;
@@ -763,21 +789,19 @@
         return rowData;
       });
 
-      // 2. Buat Worksheet
       const worksheet = XLSX.utils.json_to_sheet(excelData);
 
-      // 3. Atur Auto Width Kolom Otomatis
+      // Auto Adjust Lebar Kolom Excel
       const colWidths = Object.keys(excelData[0]).map(key => {
         let maxLength = key.length;
         excelData.forEach(row => {
           const val = row[key] ? row[key].toString() : "";
           if (val.length > maxLength) maxLength = val.length;
         });
-        return { wch: Math.max(maxLength + 3, 10) };
+        return { wch: Math.max(maxLength + 3, 12) };
       });
       worksheet['!cols'] = colWidths;
 
-      // 4. Buat Workbook & Unduh File .xlsx Asli
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Order Ayam & Marinade");
 
