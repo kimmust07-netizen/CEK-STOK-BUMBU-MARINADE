@@ -102,7 +102,11 @@
             <p class="text-xs text-slate-400">Tersimpan ke Database Cloud (Bisa Diakses Semua Orang)</p>
           </div>
         </div>
-        <span class="text-[11px] font-bold text-amber-700 bg-amber-50 border border-amber-200/80 px-3 py-1 rounded-full">Cloud Synchronized</span>
+        <div class="flex items-center gap-2">
+          <span id="syncBadgeStatus" class="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Auto-Sync Live
+          </span>
+        </div>
       </div>
 
       <form id="marinadeForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
@@ -266,7 +270,7 @@
       </form>
     </div>
 
-    <!-- 2. HASIL ANALISIS ORDER SECTION (AUTO-SCROLL KE SINI SETELAH SUBMIT) -->
+    <!-- 2. HASIL ANALISIS ORDER SECTION -->
     <div id="analysisSection" class="bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-8 relative">
       <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
         <div>
@@ -315,17 +319,20 @@
       <div class="flex flex-col sm:flex-row justify-between items-center gap-3 border-b border-slate-100 pb-4">
         <div>
           <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-database text-amber-600"></i> Database Order Ayam & Marinade
+            <i class="fa-solid fa-database text-amber-600"></i> Database Order Ayam & Marinade (Live Global)
           </h2>
-          <p class="text-xs text-slate-400 mt-0.5">Tersimpan permanen secara terpusat untuk seluruh pengisi</p>
+          <p class="text-xs text-slate-400 mt-0.5">Tersimpan permanen & diperbarui otomatis dari seluruh pengguna</p>
         </div>
 
         <div class="flex items-center gap-2">
+          <button onclick="fetchCloudData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 transition-all">
+            <i class="fa-solid fa-rotate mr-1 text-slate-500"></i>Refresh Live
+          </button>
           <button onclick="exportToExcelFormatted()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/10">
             <i class="fa-solid fa-file-excel"></i> Download Excel (.xlsx) Rapi
           </button>
           <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-rose-200 transition-all">
-            <i class="fa-solid fa-trash-can mr-1"></i>Reset Database
+            <i class="fa-solid fa-trash-can mr-1"></i>Reset
           </button>
         </div>
       </div>
@@ -446,7 +453,7 @@
   <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
     <div class="max-w-7xl mx-auto px-4 text-center space-y-1">
       <p class="font-semibold text-slate-300">Aplikasi Monitoring Order Ayam 3 Supplier & Marinade Japfa © 2026</p>
-      <p class="text-slate-500">Integrated Auto-Save LocalStorage & Google Sheets Cloud Ready</p>
+      <p class="text-slate-500">Integrated Auto-Sync Cloud Database & Google Sheets Real-Time</p>
     </div>
   </footer>
 
@@ -522,9 +529,9 @@
     // LINK GOOGLE APPS SCRIPT ANDA
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwX8Jj8MVmpAzTuU8ztb3docFvxstJuasJkN7Z6CkLiTw3Yb5HEz6aiH79m7RS4ve2K3w/exec";
 
-    let currentUser = JSON.parse(localStorage.getItem('currentUser_v2') || 'null');
+    let currentUser = JSON.parse(localStorage.getItem('currentUser_v10') || 'null');
     let columnCounts = { japfa: 4, afco: 4, delta: 4 };
-    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v9') || '[]');
+    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v10') || '[]');
 
     document.addEventListener("DOMContentLoaded", () => {
       checkUserLoginStatus();
@@ -535,11 +542,38 @@
       renderRecapTable();
       calculateGlobalSummary();
 
+      fetchCloudData(); // Fetch awal saat halaman dibuka
+
+      // AUTO REFRESH DARI CLOUD SPREADSHEET SETIAP 10 DETIK
+      setInterval(() => {
+        fetchCloudData(true);
+      }, 10000);
+
       if (MARINADE_STORE_DATA.length > 0) {
         document.getElementById("inputStoreName").value = MARINADE_STORE_DATA[0].name;
         onStoreSelect(MARINADE_STORE_DATA[0].name);
       }
     });
+
+    // FUNGSI MEMBACA DATA CLOUD (GET) BERKALA
+    async function fetchCloudData(isBackground = false) {
+      if (!GOOGLE_SCRIPT_URL || !GOOGLE_SCRIPT_URL.includes("script.google.com")) return;
+
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL);
+        if (response.ok) {
+          const cloudData = await response.json();
+          if (Array.isArray(cloudData) && cloudData.length > 0) {
+            marinadeOrdersList = cloudData;
+            localStorage.setItem('marinadeOrdersData_v10', JSON.stringify(marinadeOrdersList));
+            renderRecapTable();
+            calculateGlobalSummary();
+          }
+        }
+      } catch (err) {
+        console.log("Fetch Cloud update background skipped.");
+      }
+    }
 
     // MANAGEMENT USER LOGIN
     function checkUserLoginStatus() {
@@ -561,7 +595,7 @@
       if(!nama || !jabatan) return;
 
       currentUser = { nama, jabatan, penempatan };
-      localStorage.setItem('currentUser_v2', JSON.stringify(currentUser));
+      localStorage.setItem('currentUser_v10', JSON.stringify(currentUser));
       checkUserLoginStatus();
     }
 
@@ -738,11 +772,11 @@
       if (existingIdx >= 0) marinadeOrdersList[existingIdx] = newRecord;
       else marinadeOrdersList.unshift(newRecord);
 
-      localStorage.setItem('marinadeOrdersData_v9', JSON.stringify(marinadeOrdersList));
+      localStorage.setItem('marinadeOrdersData_v10', JSON.stringify(marinadeOrdersList));
       renderRecapTable();
       calculateGlobalSummary();
 
-      // SYNC KE GOOGLE SHEETS CLOUD
+      // KIRIM KE SPREADSHEET CLOUD
       if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes("script.google.com")) {
         try {
           await fetch(GOOGLE_SCRIPT_URL, {
@@ -751,6 +785,7 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newRecord)
           });
+          setTimeout(fetchCloudData, 1500);
         } catch (err) {
           console.log("Sync Cloud ditiadakan.");
         }
@@ -759,7 +794,6 @@
       btnSubmit.disabled = false;
       btnSubmitText.textContent = "Kalkulasi & Simpan ke Database";
 
-      // OTOMATIS BERGERAK (SMOOTH SCROLL) KE CARD HASIL ANALISIS ORDER
       document.getElementById("analysisSection").scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -788,13 +822,13 @@
               <span class="font-bold text-slate-900 block">${item.userNama || '-'}</span>
               <span class="text-[10px] text-slate-400 block">${item.userJabatan || '-'}</span>
             </td>
-            <td class="p-3.5 text-center font-bold text-blue-900 bg-blue-50/40">${item.japfaQty.toLocaleString('id-ID')}</td>
-            <td class="p-3.5 text-center font-bold text-amber-900 bg-amber-50/40">${item.afcoQty.toLocaleString('id-ID')}</td>
-            <td class="p-3.5 text-center font-bold text-emerald-900 bg-emerald-50/40">${item.deltaQty.toLocaleString('id-ID')}</td>
-            <td class="p-3.5 text-right font-black text-slate-900">${item.totalAyam.toLocaleString('id-ID')} ekor</td>
-            <td class="p-3.5 text-center font-bold text-slate-700">${item.stokAwal}</td>
-            <td class="p-3.5 text-center font-black ${item.sisaStok < 8 ? 'text-rose-600' : 'text-slate-800'}">${item.sisaStok}</td>
-            <td class="p-3.5 text-center font-black text-amber-900 bg-amber-100">${item.orderDus} DUS (${item.orderPack} pck)</td>
+            <td class="p-3.5 text-center font-bold text-blue-900 bg-blue-50/40">${(item.japfaQty || 0).toLocaleString('id-ID')}</td>
+            <td class="p-3.5 text-center font-bold text-amber-900 bg-amber-50/40">${(item.afcoQty || 0).toLocaleString('id-ID')}</td>
+            <td class="p-3.5 text-center font-bold text-emerald-900 bg-emerald-50/40">${(item.deltaQty || 0).toLocaleString('id-ID')}</td>
+            <td class="p-3.5 text-right font-black text-slate-900">${(item.totalAyam || 0).toLocaleString('id-ID')} ekor</td>
+            <td class="p-3.5 text-center font-bold text-slate-700">${item.stokAwal || 0}</td>
+            <td class="p-3.5 text-center font-black ${item.sisaStok < 8 ? 'text-rose-600' : 'text-slate-800'}">${item.sisaStok || 0}</td>
+            <td class="p-3.5 text-center font-black text-amber-900 bg-amber-100">${item.orderDus || 0} DUS (${item.orderPack || 0} pck)</td>
             <td class="p-3.5 text-center">
               <button onclick="deleteRecord(${item.id})" class="text-slate-400 hover:text-rose-600 p-1 rounded-lg transition-colors" title="Hapus Manual Data Ini">
                 <i class="fa-solid fa-trash-can"></i>
@@ -806,7 +840,6 @@
       tbody.innerHTML = rows;
     }
 
-    // HITUNG AKUMULASI GLOBAL DI WIDGET PALING BAWAH
     function calculateGlobalSummary() {
       let gJapfa = 0, gAfco = 0, gDelta = 0, gTotalAyam = 0;
       let gStokAwalPack = 0, gOrderDus = 0, gOrderPack = 0;
@@ -846,7 +879,6 @@
       document.getElementById("barDelta").style.width = `${pDelta}%`;
       document.getElementById("barDelta").textContent = pDelta > 5 ? `${pDelta}%` : '';
 
-      // TAMPILKAN TOTAL STOK AWAL TERINPUT (PACK) DAN AKAN DI ORDER (DUS & PACK)
       document.getElementById("summaryStokAwalPack").textContent = `${gStokAwalPack.toLocaleString('id-ID')} PACK`;
       document.getElementById("summaryMarinadeDus").textContent = `${gOrderDus.toLocaleString('id-ID')} DUS`;
       document.getElementById("summaryMarinadePack").textContent = `(${gOrderPack.toLocaleString('id-ID')} Pack Marinade)`;
@@ -855,7 +887,7 @@
     function deleteRecord(id) {
       if (confirm("Hapus data ini dari database? (Penghapusan hanya dilakukan secara manual)")) {
         marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
-        localStorage.setItem('marinadeOrdersData_v9', JSON.stringify(marinadeOrdersList));
+        localStorage.setItem('marinadeOrdersData_v10', JSON.stringify(marinadeOrdersList));
         renderRecapTable();
         calculateGlobalSummary();
       }
@@ -864,7 +896,7 @@
     function clearAllData() {
       if (confirm("Reset seluruh data di database? Data terhapus tidak dapat dikembalikan.")) {
         marinadeOrdersList = [];
-        localStorage.removeItem('marinadeOrdersData_v9');
+        localStorage.removeItem('marinadeOrdersData_v10');
         renderRecapTable();
         calculateGlobalSummary();
       }
