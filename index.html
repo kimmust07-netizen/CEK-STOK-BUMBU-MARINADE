@@ -26,7 +26,7 @@
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col relative">
 
-  <!-- MODAL LOGIN / FORM DATA DIRI (MANDATORY APABILA BELUM LOGIN) -->
+  <!-- MODAL LOGIN / FORM DATA DIRI -->
   <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 card-shadow border border-slate-100 relative">
       <div class="text-center mb-6">
@@ -169,7 +169,7 @@
           </div>
         </div>
 
-        <!-- 3 SUPPLIER CONTAINER DENGAN FITUR TAMBAH / KURANG KOLOM -->
+        <!-- 3 SUPPLIER CONTAINER -->
         <div class="space-y-4 pt-2">
           
           <!-- SUPPLIER 1: JAPFA -->
@@ -370,15 +370,15 @@
       <div class="border-b border-slate-100 pb-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
           <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-chart-pie text-amber-600"></i> Rekapitualisasi & Diagram Persentase Bulanan
+            <i class="fa-solid fa-chart-pie text-amber-600"></i> Rekapitulasi & Diagram Persentase Bulanan
           </h2>
           <p class="text-xs text-slate-400 mt-0.5">Pilih periode bulan untuk menampilkan visualisasi diagram lingkaran dan total komulatif store</p>
         </div>
 
-        <!-- FILTER BULAN -->
+        <!-- FILTER BULAN SINKRON DENGAN DATA -->
         <div class="flex items-center gap-2 w-full md:w-auto">
           <label class="text-xs font-bold text-slate-700 whitespace-nowrap"><i class="fa-solid fa-filter text-amber-500 mr-1"></i>Pilih Bulan:</label>
-          <select id="filterMonthSelect" onchange="renderMonthlyDashboard()" class="bg-slate-50 border border-slate-300 rounded-2xl px-3.5 py-2 text-xs font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500 w-full md:w-48">
+          <select id="filterMonthSelect" onchange="renderMonthlyDashboard()" class="bg-amber-50/70 border border-amber-300 rounded-2xl px-3.5 py-2 text-xs font-bold text-amber-950 focus:bg-white focus:ring-2 focus:ring-amber-500 w-full md:w-56 shadow-sm">
             <!-- Dynamic Month Options -->
           </select>
         </div>
@@ -539,12 +539,18 @@
       {"name": "AGS MOJOKERTO MERI", "stokAwal": 20, "ayamAwal": 200}
     ];
 
-    // URL GOOGLE APPS SCRIPT BARU
+    const DEFAULT_MONTH_LIST = [
+      "Agustus 2026", "September 2026", "Oktober 2026", "November 2026", "Desember 2026",
+      "Januari 2027", "Februari 2027", "Maret 2027", "April 2027", "Mei 2027", 
+      "Juni 2027", "Juli 2027", "Agustus 2027", "September 2027", "Oktober 2027", "November 2027", "Desember 2027"
+    ];
+
+    // URL GOOGLE APPS SCRIPT ANDA
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa603zBWU-r_y56EvWqyUA9FCKc084ZcYD4607UNz3E7oiW2IUoCGGcG6YbHvpYqXUSg/exec";
 
-    let currentUser = JSON.parse(localStorage.getItem('currentUser_v12') || 'null');
+    let currentUser = JSON.parse(localStorage.getItem('currentUser_v13') || 'null');
     let columnCounts = { japfa: 4, afco: 4, delta: 4 };
-    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v12') || '[]');
+    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v13') || '[]');
     let supplierPieChartInstance = null;
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -560,7 +566,7 @@
 
       fetchCloudData();
 
-      // AUTO REFRESH DARI CLOUD SPREADSHEET SETIAP 10 DETIK
+      // AUTO REFRESH CLOUD SETIAP 10 DETIK
       setInterval(() => {
         fetchCloudData(true);
       }, 10000);
@@ -571,7 +577,7 @@
       }
     });
 
-    // MEMBACA DATA CLOUD (GET) BERKALA DENGAN HANDLING REDIRECT
+    // MEMBACA DATA CLOUD (GET) BERKALA
     async function fetchCloudData(isBackground = false) {
       if (!GOOGLE_SCRIPT_URL || !GOOGLE_SCRIPT_URL.includes("script.google.com")) return;
 
@@ -585,7 +591,7 @@
           const cloudData = await response.json();
           if (Array.isArray(cloudData) && cloudData.length > 0) {
             marinadeOrdersList = cloudData;
-            localStorage.setItem('marinadeOrdersData_v12', JSON.stringify(marinadeOrdersList));
+            localStorage.setItem('marinadeOrdersData_v13', JSON.stringify(marinadeOrdersList));
             renderRecapTable();
             initMonthFilterOptions();
             renderMonthlyDashboard();
@@ -616,7 +622,7 @@
       if(!nama || !jabatan) return;
 
       currentUser = { nama, jabatan, penempatan };
-      localStorage.setItem('currentUser_v12', JSON.stringify(currentUser));
+      localStorage.setItem('currentUser_v13', JSON.stringify(currentUser));
       checkUserLoginStatus();
     }
 
@@ -668,7 +674,6 @@
     function populateDatalist() {
       const datalist = document.getElementById("storeDatalist");
       datalist.innerHTML = MARINADE_STORE_DATA.map(s => `<option value="${s.name}">Stok Awal: ${s.stokAwal} Pack</option>`).join('');
-      document.getElementById("statStoreCount").textContent = MARINADE_STORE_DATA.length;
     }
 
     function calculateTotals() {
@@ -793,9 +798,11 @@
       if (existingIdx >= 0) marinadeOrdersList[existingIdx] = newRecord;
       else marinadeOrdersList.unshift(newRecord);
 
-      localStorage.setItem('marinadeOrdersData_v12', JSON.stringify(marinadeOrdersList));
+      localStorage.setItem('marinadeOrdersData_v13', JSON.stringify(marinadeOrdersList));
       renderRecapTable();
-      initMonthFilterOptions();
+      
+      // Auto-select bulan yang baru disubmit di widget bawah
+      initMonthFilterOptions(month);
       renderMonthlyDashboard();
 
       // KIRIM KE SPREADSHEET CLOUD
@@ -862,23 +869,24 @@
       tbody.innerHTML = rows;
     }
 
-    // INISIATOR DROPDOWN BULAN PADA WIDGET PALING BAWAH
-    function initMonthFilterOptions() {
+    // INISIALISASI PISAHAN BULAN FILTER (DIPERBAIKI DENGAN DAFTAR DEFAULTS + SPREAD DATA TERISI)
+    function initMonthFilterOptions(targetMonth = null) {
       const select = document.getElementById("filterMonthSelect");
-      const currentSelected = select.value;
+      const currentSelected = targetMonth || select.value || document.getElementById("inputMonth").value;
       
-      let monthsSet = new Set();
-      marinadeOrdersList.forEach(item => { if(item.month) monthsSet.add(item.month); });
-      
-      if (monthsSet.size === 0) {
-        monthsSet.add("November 2026");
-        monthsSet.add("Desember 2026");
-      }
+      let allMonthsSet = new Set(DEFAULT_MONTH_LIST);
+      // Masukkan juga bulan ekstra dari data database jika ada
+      marinadeOrdersList.forEach(item => { if(item.month) allMonthsSet.add(item.month); });
 
-      let optionsHtml = Array.from(monthsSet).map(m => `<option value="${m}">${m}</option>`).join('');
+      let optionsHtml = Array.from(allMonthsSet).map(m => {
+        let countInMonth = marinadeOrdersList.filter(i => i.month === m).length;
+        let labelSuffix = countInMonth > 0 ? ` (${countInMonth} Store)` : ' (Kosong)';
+        return `<option value="${m}">${m}${labelSuffix}</option>`;
+      }).join('');
+
       select.innerHTML = optionsHtml;
 
-      if (currentSelected && monthsSet.has(currentSelected)) {
+      if (currentSelected && allMonthsSet.has(currentSelected)) {
         select.value = currentSelected;
       }
     }
@@ -961,7 +969,7 @@
             tooltip: {
               callbacks: {
                 label: function(context) {
-                  if(mTotalAyam === 0) return " Belum Ada Data";
+                  if(mTotalAyam === 0) return " Belum Ada Data Pada Bulan Ini";
                   let val = context.raw || 0;
                   let pct = Math.round((val / mTotalAyam) * 100);
                   return ` ${context.label}: ${val.toLocaleString('id-ID')} ekor (${pct}%)`;
@@ -976,7 +984,7 @@
     function deleteRecord(id) {
       if (confirm("Hapus data ini dari database? (Penghapusan hanya dilakukan secara manual)")) {
         marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
-        localStorage.setItem('marinadeOrdersData_v12', JSON.stringify(marinadeOrdersList));
+        localStorage.setItem('marinadeOrdersData_v13', JSON.stringify(marinadeOrdersList));
         renderRecapTable();
         initMonthFilterOptions();
         renderMonthlyDashboard();
@@ -986,7 +994,7 @@
     function clearAllData() {
       if (confirm("Reset seluruh data di database? Data terhapus tidak dapat dikembalikan.")) {
         marinadeOrdersList = [];
-        localStorage.removeItem('marinadeOrdersData_v12');
+        localStorage.removeItem('marinadeOrdersData_v13');
         renderRecapTable();
         initMonthFilterOptions();
         renderMonthlyDashboard();
