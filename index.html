@@ -4,8 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monitoring Orderan Ayam 3 Supplier & Marinade Japfa (8 Kirim)</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- SheetJS Library untuk Ekspor Excel Rapi (.xlsx) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
     body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
@@ -255,8 +260,8 @@
             <div class="flex items-center gap-1.5 font-bold text-amber-900">
               <i class="fa-solid fa-circle-info text-amber-600"></i> Ketentuan Bumbu Marinade
             </div>
-            <p>• Kebutuhan bumbu marinade **hanya dihitung dari total akumulasi 8x kirim Ayam Japfa**.</p>
-            <p>• Jika Sisa Stok Japfa **&lt; 8 pack** $\rightarrow$ Otomatis merekomendasikan **Order 1 Dus (20 Pack)**.</p>
+            <p>• Kebutuhan bumbu marinade <strong>hanya dihitung dari total akumulasi 8x kirim Ayam Japfa</strong>.</p>
+            <p>• Jika Sisa Stok Japfa <strong>&lt; 8 pack</strong> $\rightarrow$ Otomatis merekomendasikan <strong>Order 1 Dus (20 Pack)</strong>.</p>
           </div>
         </div>
 
@@ -275,8 +280,8 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/10">
-            <i class="fa-solid fa-file-excel"></i> Ekspor CSV Excel (Detail 8 Kirim)
+          <button onclick="exportToExcelFormatted()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/10">
+            <i class="fa-solid fa-file-excel"></i> Download Excel (.xlsx) Rapi
           </button>
           <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-rose-200 transition-all">
             <i class="fa-solid fa-trash-can mr-1"></i>Reset
@@ -327,9 +332,9 @@
         
         <!-- VISUAL PROGRESS BAR -->
         <div class="w-full h-5 bg-slate-100 rounded-full overflow-hidden flex shadow-inner border border-slate-200">
-          <div id="barJapfa" class="bg-blue-600 h-full text-[10px] text-white font-black flex items-center justify-center transition-all duration-500" style="width: 50%">50%</div>
-          <div id="barAfco" class="bg-amber-500 h-full text-[10px] text-white font-black flex items-center justify-center transition-all duration-500" style="width: 30%">30%</div>
-          <div id="barDelta" class="bg-emerald-600 h-full text-[10px] text-white font-black flex items-center justify-center transition-all duration-500" style="width: 20%">20%</div>
+          <div id="barJapfa" class="bg-blue-600 h-full text-[10px] text-white font-black flex items-center justify-center transition-all duration-500" style="width: 0%">0%</div>
+          <div id="barAfco" class="bg-amber-500 h-full text-[10px] text-white font-black flex items-center justify-center transition-all duration-500" style="width: 0%">0%</div>
+          <div id="barDelta" class="bg-emerald-600 h-full text-[10px] text-white font-black flex items-center justify-center transition-all duration-500" style="width: 0%">0%</div>
         </div>
 
         <!-- STATS CARDS GRID -->
@@ -339,7 +344,7 @@
           <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-4">
             <div class="flex items-center justify-between">
               <span class="text-xs font-bold text-blue-900 uppercase">JAPFA</span>
-              <span id="pctJapfa" class="text-xs font-black text-blue-800 bg-blue-200/80 px-2 py-0.5 rounded-md">50%</span>
+              <span id="pctJapfa" class="text-xs font-black text-blue-800 bg-blue-200/80 px-2 py-0.5 rounded-md">0%</span>
             </div>
             <div id="summaryJapfaQty" class="text-xl font-black text-blue-900 mt-2">0 <span class="text-xs font-normal text-slate-500">ekor</span></div>
             <span class="text-[10px] text-blue-700 font-medium block mt-1">Grounded Basis Marinade</span>
@@ -349,7 +354,7 @@
           <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4">
             <div class="flex items-center justify-between">
               <span class="text-xs font-bold text-amber-900 uppercase">AFCO</span>
-              <span id="pctAfco" class="text-xs font-black text-amber-800 bg-amber-200/80 px-2 py-0.5 rounded-md">30%</span>
+              <span id="pctAfco" class="text-xs font-black text-amber-800 bg-amber-200/80 px-2 py-0.5 rounded-md">0%</span>
             </div>
             <div id="summaryAfcoQty" class="text-xl font-black text-amber-900 mt-2">0 <span class="text-xs font-normal text-slate-500">ekor</span></div>
             <span class="text-[10px] text-amber-700 font-medium block mt-1">Tanpa Bumbu Marinade</span>
@@ -359,7 +364,7 @@
           <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4">
             <div class="flex items-center justify-between">
               <span class="text-xs font-bold text-emerald-900 uppercase">DELTA</span>
-              <span id="pctDelta" class="text-xs font-black text-emerald-800 bg-emerald-200/80 px-2 py-0.5 rounded-md">20%</span>
+              <span id="pctDelta" class="text-xs font-black text-emerald-800 bg-emerald-200/80 px-2 py-0.5 rounded-md">0%</span>
             </div>
             <div id="summaryDeltaQty" class="text-xl font-black text-emerald-900 mt-2">0 <span class="text-xs font-normal text-slate-500">ekor</span></div>
             <span class="text-[10px] text-emerald-700 font-medium block mt-1">Tanpa Bumbu Marinade</span>
@@ -389,7 +394,6 @@
 
   <!-- SCRIPT LOGIC -->
   <script>
-    // DATASET 64 STORE DARI SHEET MARINADE EXCEL
     const MARINADE_STORE_DATA = [
       {"name": "AGS JOMBANG PLOSO", "stokAwal": 26, "ayamAwal": 280},
       {"name": "AGS PASURUAN indragiri", "stokAwal": 16, "ayamAwal": 160},
@@ -457,7 +461,7 @@
       {"name": "AGS MOJOKERTO MERI", "stokAwal": 20, "ayamAwal": 200}
     ];
 
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdkA4xe8eLMqERKCX_aFvCZ1UvvRml2QPSJAjta2smInFZFI0UQSyaZ6fqEoDUzBQG/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOqe6U3Ib_FKmaTcXuTUGlX087PyrOyoGPc-qp6xv5P4Pgb9HDmc4jnp_M7YNbXnPW/exec";
 
     let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v5') || '[]');
 
@@ -506,21 +510,15 @@
       if (match) {
         document.getElementById("inputStokAwal").value = match.stokAwal;
         
-        // Auto fill sample 8 kirim
         const totalSample = match.ayamAwal;
-        const japfaVal = Math.round((totalSample * 0.50) / 4 / 10) * 10;
-        const afcoVal = Math.round((totalSample * 0.30) / 4 / 10) * 10;
-        const deltaVal = Math.round((totalSample * 0.20) / 4 / 10) * 10;
+        const japfaVal = Math.round((totalSample * 0.50) / 8 / 10) * 10;
+        const afcoVal = Math.round((totalSample * 0.30) / 8 / 10) * 10;
+        const deltaVal = Math.round((totalSample * 0.20) / 8 / 10) * 10;
 
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 8; i++) {
           document.getElementById(`japfa_${i}`).value = japfaVal;
           document.getElementById(`afco_${i}`).value = afcoVal;
           document.getElementById(`delta_${i}`).value = deltaVal;
-        }
-        for (let i = 5; i <= 8; i++) {
-          document.getElementById(`japfa_${i}`).value = 0;
-          document.getElementById(`afco_${i}`).value = 0;
-          document.getElementById(`delta_${i}`).value = 0;
         }
 
         calculateTotals();
@@ -542,7 +540,6 @@
       
       const totals = calculateTotals();
 
-      // Calculation Marinade (ONLY FROM JAPFA)
       const packUsed = Math.ceil(totals.japfaSum / 10);
       const sisaStok = stokAwal - packUsed;
 
@@ -556,7 +553,6 @@
       }
       const orderPack = orderDus * 20;
 
-      // Status
       let statusText = "STOK AMAN";
       let statusClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
 
@@ -568,7 +564,6 @@
         statusClass = "bg-amber-100 text-amber-800 border-amber-300";
       }
 
-      // Update Result Dashboard UI
       document.getElementById("resStoreSubtitle").textContent = `${storeName} (${month})`;
       const badge = document.getElementById("statusBadge");
       badge.textContent = statusText;
@@ -683,9 +678,12 @@
       document.getElementById("summaryAfcoQty").innerHTML = `${afco.toLocaleString('id-ID')} <span class="text-xs font-normal text-slate-500">ekor</span>`;
       document.getElementById("summaryDeltaQty").innerHTML = `${delta.toLocaleString('id-ID')} <span class="text-xs font-normal text-slate-500">ekor</span>`;
 
-      const pJapfa = totalAyam > 0 ? Math.round((japfa / totalAyam) * 100) : 0;
-      const pAfco = totalAyam > 0 ? Math.round((afco / totalAyam) * 100) : 0;
-      const pDelta = totalAyam > 0 ? (100 - pJapfa - pAfco) : 0;
+      let pJapfa = 0, pAfco = 0, pDelta = 0;
+      if (totalAyam > 0) {
+        pJapfa = Math.round((japfa / totalAyam) * 100);
+        pAfco = Math.round((afco / totalAyam) * 100);
+        pDelta = 100 - pJapfa - pAfco;
+      }
 
       document.getElementById("pctJapfa").textContent = `${pJapfa}%`;
       document.getElementById("pctAfco").textContent = `${pAfco}%`;
@@ -720,34 +718,70 @@
       }
     }
 
-    function exportToCSV() {
-      if (marinadeOrdersList.length === 0) { alert("Tidak ada data untuk diekspor!"); return; }
-      
-      // Header Ekspor Rapi 24 Kolom Kirim + Summary
-      let csv = "No,Nama Store,Bulan,Stok Awal,";
-      for(let i=1;i<=8;i++) csv += `Japfa_Kirim_${i},`;
-      for(let i=1;i<=8;i++) csv += `Afco_Kirim_${i},`;
-      for(let i=1;i<=8;i++) csv += `Delta_Kirim_${i},`;
-      csv += "Total Japfa,Total Afco,Total Delta,Total Ayam All,Marinade Used,Sisa Stok,Order Dus,Order Pack\n";
+    // FUNGSI EKSPOR EXCEL FORMATTED (.XLSX) RAPI & TERTATA PER SUPPLIER
+    function exportToExcelFormatted() {
+      if (marinadeOrdersList.length === 0) { 
+        alert("Tidak ada data untuk diekspor!"); 
+        return; 
+      }
 
-      marinadeOrdersList.forEach((item, idx) => {
-        csv += `${idx + 1},"${item.storeName}",${item.month},${item.stokAwal},`;
-        
-        // Loop 8 Kirim Japfa
-        for(let i=0;i<8;i++) csv += `${item.japfaArr ? item.japfaArr[i] || 0 : 0},`;
-        // Loop 8 Kirim Afco
-        for(let i=0;i<8;i++) csv += `${item.afcoArr ? item.afcoArr[i] || 0 : 0},`;
-        // Loop 8 Kirim Delta
-        for(let i=0;i<8;i++) csv += `${item.deltaArr ? item.deltaArr[i] || 0 : 0},`;
+      // 1. Susun Array Data dengan Header yang Rapi & Jelas
+      const excelData = marinadeOrdersList.map((item, idx) => {
+        let rowData = {
+          "No": idx + 1,
+          "Nama Store": item.storeName,
+          "Periode Bulan": item.month,
+          "Stok Awal Marinade (Pack)": item.stokAwal
+        };
 
-        csv += `${item.japfaQty},${item.afcoQty},${item.deltaQty},${item.totalAyam},${item.packUsed},${item.sisaStok},${item.orderDus},${item.orderPack}\n`;
+        // 8 Kirim Japfa
+        for(let i=1; i<=8; i++) {
+          rowData[`Japfa Kirim ${i}`] = item.japfaArr ? (item.japfaArr[i-1] || 0) : 0;
+        }
+        rowData["Total Ayam Japfa (Ekor)"] = item.japfaQty;
+
+        // 8 Kirim Afco
+        for(let i=1; i<=8; i++) {
+          rowData[`Afco Kirim ${i}`] = item.afcoArr ? (item.afcoArr[i-1] || 0) : 0;
+        }
+        rowData["Total Ayam Afco (Ekor)"] = item.afcoQty;
+
+        // 8 Kirim Delta
+        for(let i=1; i<=8; i++) {
+          rowData[`Delta Kirim ${i}`] = item.deltaArr ? (item.deltaArr[i-1] || 0) : 0;
+        }
+        rowData["Total Ayam Delta (Ekor)"] = item.deltaQty;
+
+        // Summary Akumulasi All & Order Marinade
+        rowData["GRAND TOTAL AYAM (Ekor)"] = item.totalAyam;
+        rowData["Marinade Terpakai (Pack)"] = item.packUsed;
+        rowData["Sisa Stok Marinade (Pack)"] = item.sisaStok;
+        rowData["Rekomendasi Order (DUS)"] = item.orderDus;
+        rowData["Rekomendasi Order (PACK)"] = item.orderPack;
+        rowData["Status Stok"] = item.statusText;
+
+        return rowData;
       });
 
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "Rekap_Order_Ayam_3Supplier_8Kirim_Detail.csv";
-      link.click();
+      // 2. Buat Worksheet
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+
+      // 3. Atur Auto Width Kolom Otomatis
+      const colWidths = Object.keys(excelData[0]).map(key => {
+        let maxLength = key.length;
+        excelData.forEach(row => {
+          const val = row[key] ? row[key].toString() : "";
+          if (val.length > maxLength) maxLength = val.length;
+        });
+        return { wch: Math.max(maxLength + 3, 10) };
+      });
+      worksheet['!cols'] = colWidths;
+
+      // 4. Buat Workbook & Unduh File .xlsx Asli
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Order Ayam & Marinade");
+
+      XLSX.writeFile(workbook, "Rekap_Monitoring_Order_Ayam_3Supplier_Detail.xlsx");
     }
   </script>
 </body>
