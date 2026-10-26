@@ -89,7 +89,7 @@
     </div>
   </header>
 
-  <!-- MAIN CONTAINER (LAYOUT BERURUTAN DAPAT DI-SCROLL DOWN) -->
+  <!-- MAIN CONTAINER -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-10">
 
     <!-- 1. FORM INPUT SECTION -->
@@ -539,12 +539,12 @@
       {"name": "AGS MOJOKERTO MERI", "stokAwal": 20, "ayamAwal": 200}
     ];
 
-    // LINK GOOGLE APPS SCRIPT ANDA
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwX8Jj8MVmpAzTuU8ztb3docFvxstJuasJkN7Z6CkLiTw3Yb5HEz6aiH79m7RS4ve2K3w/exec";
+    // URL GOOGLE APPS SCRIPT BARU
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa603zBWU-r_y56EvWqyUA9FCKc084ZcYD4607UNz3E7oiW2IUoCGGcG6YbHvpYqXUSg/exec";
 
-    let currentUser = JSON.parse(localStorage.getItem('currentUser_v11') || 'null');
+    let currentUser = JSON.parse(localStorage.getItem('currentUser_v12') || 'null');
     let columnCounts = { japfa: 4, afco: 4, delta: 4 };
-    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v11') || '[]');
+    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v12') || '[]');
     let supplierPieChartInstance = null;
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -560,7 +560,7 @@
 
       fetchCloudData();
 
-      // AUTO REFRESH CLOUD SETIAP 10 DETIK
+      // AUTO REFRESH DARI CLOUD SPREADSHEET SETIAP 10 DETIK
       setInterval(() => {
         fetchCloudData(true);
       }, 10000);
@@ -571,17 +571,21 @@
       }
     });
 
-    // MEMBACA DATA CLOUD (GET) REALTIME
+    // MEMBACA DATA CLOUD (GET) BERKALA DENGAN HANDLING REDIRECT
     async function fetchCloudData(isBackground = false) {
       if (!GOOGLE_SCRIPT_URL || !GOOGLE_SCRIPT_URL.includes("script.google.com")) return;
 
       try {
-        const response = await fetch(GOOGLE_SCRIPT_URL);
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "GET",
+          redirect: "follow"
+        });
+
         if (response.ok) {
           const cloudData = await response.json();
           if (Array.isArray(cloudData) && cloudData.length > 0) {
             marinadeOrdersList = cloudData;
-            localStorage.setItem('marinadeOrdersData_v11', JSON.stringify(marinadeOrdersList));
+            localStorage.setItem('marinadeOrdersData_v12', JSON.stringify(marinadeOrdersList));
             renderRecapTable();
             initMonthFilterOptions();
             renderMonthlyDashboard();
@@ -612,7 +616,7 @@
       if(!nama || !jabatan) return;
 
       currentUser = { nama, jabatan, penempatan };
-      localStorage.setItem('currentUser_v11', JSON.stringify(currentUser));
+      localStorage.setItem('currentUser_v12', JSON.stringify(currentUser));
       checkUserLoginStatus();
     }
 
@@ -789,7 +793,7 @@
       if (existingIdx >= 0) marinadeOrdersList[existingIdx] = newRecord;
       else marinadeOrdersList.unshift(newRecord);
 
-      localStorage.setItem('marinadeOrdersData_v11', JSON.stringify(marinadeOrdersList));
+      localStorage.setItem('marinadeOrdersData_v12', JSON.stringify(marinadeOrdersList));
       renderRecapTable();
       initMonthFilterOptions();
       renderMonthlyDashboard();
@@ -864,10 +868,8 @@
       const currentSelected = select.value;
       
       let monthsSet = new Set();
-      // Tambahkan bulan dari data tersimpan
       marinadeOrdersList.forEach(item => { if(item.month) monthsSet.add(item.month); });
       
-      // Default bulan 2026/2027 jika data belum ada
       if (monthsSet.size === 0) {
         monthsSet.add("November 2026");
         monthsSet.add("Desember 2026");
@@ -886,7 +888,6 @@
       const selectedMonth = document.getElementById("filterMonthSelect").value;
       document.getElementById("pieMonthLabel").textContent = selectedMonth || "Bulan";
 
-      // Filter data sesuai bulan yang dipilih
       const filteredList = marinadeOrdersList.filter(item => item.month === selectedMonth);
 
       let mJapfa = 0, mAfco = 0, mDelta = 0, mTotalAyam = 0;
@@ -902,7 +903,6 @@
         mOrderPack += item.orderPack || 0;
       });
 
-      // Update Label & Metrik Total
       document.getElementById("badgeStoreCountMonth").textContent = `${filteredList.length} Store Terinput`;
       document.getElementById("monthlyGrandTotalAyam").textContent = `${mTotalAyam.toLocaleString('id-ID')} EKOR`;
 
@@ -925,11 +925,10 @@
       document.getElementById("monthlyOrderDus").textContent = `${mOrderDus.toLocaleString('id-ID')} DUS`;
       document.getElementById("monthlyOrderPack").textContent = `(${mOrderPack.toLocaleString('id-ID')} Pack Marinade)`;
 
-      // BUILD / UPDATE PIE CHART (CHART.JS)
       const ctx = document.getElementById('supplierPieChart').getContext('2d');
 
       if (supplierPieChartInstance) {
-        supplierPieChartInstance.destroy(); // Destroy instance lama sebelum render baru
+        supplierPieChartInstance.destroy();
       }
 
       const chartData = (mTotalAyam === 0) ? [1, 1, 1] : [mJapfa, mAfco, mDelta];
@@ -977,7 +976,7 @@
     function deleteRecord(id) {
       if (confirm("Hapus data ini dari database? (Penghapusan hanya dilakukan secara manual)")) {
         marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
-        localStorage.setItem('marinadeOrdersData_v11', JSON.stringify(marinadeOrdersList));
+        localStorage.setItem('marinadeOrdersData_v12', JSON.stringify(marinadeOrdersList));
         renderRecapTable();
         initMonthFilterOptions();
         renderMonthlyDashboard();
@@ -987,7 +986,7 @@
     function clearAllData() {
       if (confirm("Reset seluruh data di database? Data terhapus tidak dapat dikembalikan.")) {
         marinadeOrdersList = [];
-        localStorage.removeItem('marinadeOrdersData_v11');
+        localStorage.removeItem('marinadeOrdersData_v12');
         renderRecapTable();
         initMonthFilterOptions();
         renderMonthlyDashboard();
