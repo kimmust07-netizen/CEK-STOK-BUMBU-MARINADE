@@ -126,32 +126,23 @@
             <datalist id="storeDatalist"></datalist>
           </div>
 
-          <!-- 2. Month -->
+          <!-- 2. Month (HANYA BULAN) -->
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">2. Periode Bulan <span class="text-rose-500">*</span></label>
             <div class="relative">
               <select id="inputMonth" required onchange="syncMonthFilterWithForm(this.value)" class="input-focus w-full pl-8 pr-2 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-2xl font-semibold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
-                <optgroup label="Tahun 2026">
-                  <option value="Agustus 2026">Agustus 2026</option>
-                  <option value="September 2026">September 2026</option>
-                  <option value="Oktober 2026">Oktober 2026</option>
-                  <option value="November 2026" selected>November 2026</option>
-                  <option value="Desember 2026">Desember 2026</option>
-                </optgroup>
-                <optgroup label="Tahun 2027">
-                  <option value="Januari 2027">Januari 2027</option>
-                  <option value="Februari 2027">Februari 2027</option>
-                  <option value="Maret 2027">Maret 2027</option>
-                  <option value="April 2027">April 2027</option>
-                  <option value="Mei 2027">Mei 2027</option>
-                  <option value="Juni 2027">Juni 2027</option>
-                  <option value="Juli 2027">Juli 2027</option>
-                  <option value="Agustus 2027">Agustus 2027</option>
-                  <option value="September 2027">September 2027</option>
-                  <option value="Oktober 2027">Oktober 2027</option>
-                  <option value="November 2027">November 2027</option>
-                  <option value="Desember 2027">Desember 2027</option>
-                </optgroup>
+                <option value="Januari">Januari</option>
+                <option value="Februari">Februari</option>
+                <option value="Maret">Maret</option>
+                <option value="April">April</option>
+                <option value="Mei">Mei</option>
+                <option value="Juni">Juni</option>
+                <option value="Juli">Juli</option>
+                <option value="Agustus">Agustus</option>
+                <option value="September">September</option>
+                <option value="Oktober">Oktober</option>
+                <option value="November" selected>November</option>
+                <option value="Desember">Desember</option>
               </select>
               <i class="fa-solid fa-calendar-days absolute left-2.5 top-3.5 text-slate-400 text-xs"></i>
             </div>
@@ -375,31 +366,23 @@
           <p class="text-xs text-slate-400 mt-0.5">Pilih periode bulan untuk menampilkan visualisasi diagram lingkaran dan total komulatif store</p>
         </div>
 
-        <!-- FILTER BULAN (DIPERTANKAN SECARA FISIK) -->
+        <!-- FILTER BULAN SINKRON -->
         <div class="flex items-center gap-2 w-full md:w-auto">
           <label class="text-xs font-bold text-slate-700 whitespace-nowrap"><i class="fa-solid fa-filter text-amber-500 mr-1"></i>Pilih Bulan:</label>
-          <select id="filterMonthSelect" onchange="renderMonthlyDashboard()" class="bg-amber-50/70 border border-amber-300 rounded-2xl px-3.5 py-2 text-xs font-bold text-amber-950 focus:bg-white focus:ring-2 focus:ring-amber-500 w-full md:w-60 shadow-sm">
-            <optgroup label="Tahun 2026">
-              <option value="Agustus 2026">Agustus 2026</option>
-              <option value="September 2026">September 2026</option>
-              <option value="Oktober 2026">Oktober 2026</option>
-              <option value="November 2026" selected>November 2026</option>
-              <option value="Desember 2026">Desember 2026</option>
-            </optgroup>
-            <optgroup label="Tahun 2027">
-              <option value="Januari 2027">Januari 2027</option>
-              <option value="Februari 2027">Februari 2027</option>
-              <option value="Maret 2027">Maret 2027</option>
-              <option value="April 2027">April 2027</option>
-              <option value="Mei 2027">Mei 2027</option>
-              <option value="Juni 2027">Juni 2027</option>
-              <option value="Juli 2027">Juli 2027</option>
-              <option value="Agustus 2027">Agustus 2027</option>
-              <option value="September 2027">September 2027</option>
-              <option value="Oktober 2027">Oktober 2027</option>
-              <option value="November 2027">November 2027</option>
-              <option value="Desember 2027">Desember 2027</option>
-            </optgroup>
+          <select id="filterMonthSelect" onchange="renderRecapTable(); renderMonthlyDashboard();" class="bg-amber-50/70 border border-amber-300 rounded-2xl px-3.5 py-2 text-xs font-bold text-amber-950 focus:bg-white focus:ring-2 focus:ring-amber-500 w-full md:w-60 shadow-sm">
+            <option value="Semua Bulan">Semua Bulan</option>
+            <option value="Januari">Januari</option>
+            <option value="Februari">Februari</option>
+            <option value="Maret">Maret</option>
+            <option value="April">April</option>
+            <option value="Mei">Mei</option>
+            <option value="Juni">Juni</option>
+            <option value="Juli">Juli</option>
+            <option value="Agustus">Agustus</option>
+            <option value="September">September</option>
+            <option value="Oktober">Oktober</option>
+            <option value="November" selected>November</option>
+            <option value="Desember">Desember</option>
           </select>
         </div>
       </div>
@@ -559,7 +542,6 @@
       {"name": "AGS MOJOKERTO MERI", "stokAwal": 20, "ayamAwal": 200}
     ];
 
-    // URL GOOGLE APPS SCRIPT ANDA
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa603zBWU-r_y56EvWqyUA9FCKc084ZcYD4607UNz3E7oiW2IUoCGGcG6YbHvpYqXUSg/exec";
 
     let currentUser = JSON.parse(localStorage.getItem('currentUser_v14') || 'null');
@@ -567,20 +549,34 @@
     let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v14') || '[]');
     let supplierPieChartInstance = null;
 
+    // FUNGSI PEMBERSIH BULAN (Normalisasi agar data lama & baru tetap cocok)
+    function cleanMonthName(rawMonth) {
+      if(!rawMonth) return "";
+      const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+      for (let m of months) {
+        if (rawMonth.toLowerCase().includes(m.toLowerCase())) return m;
+      }
+      return rawMonth.trim();
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       checkUserLoginStatus();
       renderSupplierInputs('japfa');
       renderSupplierInputs('afco');
       renderSupplierInputs('delta');
       populateDatalist();
+
+      // Normalisasi bulan di semua data lokal yang sudah tersimpan sebelumnya
+      marinadeOrdersList = marinadeOrdersList.map(item => ({
+        ...item,
+        month: cleanMonthName(item.month)
+      }));
+
       renderRecapTable();
-      
-      // Render Dashboard Bulan Pertama kali
       renderMonthlyDashboard();
 
       fetchCloudData();
 
-      // AUTO REFRESH CLOUD SETIAP 10 DETIK
       setInterval(() => {
         fetchCloudData(true);
       }, 10000);
@@ -591,7 +587,6 @@
       }
     });
 
-    // MEMBACA DATA CLOUD (GET) BERKALA
     async function fetchCloudData(isBackground = false) {
       if (!GOOGLE_SCRIPT_URL || !GOOGLE_SCRIPT_URL.includes("script.google.com")) return;
 
@@ -604,7 +599,10 @@
         if (response.ok) {
           const cloudData = await response.json();
           if (Array.isArray(cloudData) && cloudData.length > 0) {
-            marinadeOrdersList = cloudData;
+            marinadeOrdersList = cloudData.map(item => ({
+              ...item,
+              month: cleanMonthName(item.month)
+            }));
             localStorage.setItem('marinadeOrdersData_v14', JSON.stringify(marinadeOrdersList));
             renderRecapTable();
             renderMonthlyDashboard();
@@ -615,7 +613,6 @@
       }
     }
 
-    // USER LOGIN HANDLER
     function checkUserLoginStatus() {
       if (!currentUser) {
         document.getElementById("loginModal").classList.remove("hidden");
@@ -730,9 +727,11 @@
     }
 
     function syncMonthFilterWithForm(selectedVal) {
+      const cleanVal = cleanMonthName(selectedVal);
       const selectFilter = document.getElementById("filterMonthSelect");
       if(selectFilter) {
-        selectFilter.value = selectedVal;
+        selectFilter.value = cleanVal;
+        renderRecapTable();
         renderMonthlyDashboard();
       }
     }
@@ -748,7 +747,8 @@
       btnSubmitText.textContent = "Menyimpan ke Cloud...";
 
       const storeName = document.getElementById("inputStoreName").value.trim();
-      const month = document.getElementById("inputMonth").value;
+      const rawMonth = document.getElementById("inputMonth").value;
+      const month = cleanMonthName(rawMonth);
       const stokAwal = parseInt(document.getElementById("inputStokAwal").value) || 0;
       
       const ketJapfa = document.getElementById("ket_japfa").value.trim() || "-";
@@ -814,17 +814,14 @@
         statusText: statusText
       };
 
-      const existingIdx = marinadeOrdersList.findIndex(i => i.storeName.toLowerCase() === storeName.toLowerCase() && i.month === month);
+      const existingIdx = marinadeOrdersList.findIndex(i => i.storeName.toLowerCase() === storeName.toLowerCase() && cleanMonthName(i.month) === month);
       if (existingIdx >= 0) marinadeOrdersList[existingIdx] = newRecord;
       else marinadeOrdersList.unshift(newRecord);
 
       localStorage.setItem('marinadeOrdersData_v14', JSON.stringify(marinadeOrdersList));
-      renderRecapTable();
       
-      // Auto-select bulan yang baru diinput di widget rekap bawah
       syncMonthFilterWithForm(month);
 
-      // KIRIM KE SPREADSHEET CLOUD
       if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes("script.google.com")) {
         try {
           await fetch(GOOGLE_SCRIPT_URL, {
@@ -847,12 +844,19 @@
 
     function renderRecapTable() {
       const tbody = document.getElementById("recapTableBody");
-      if (marinadeOrdersList.length === 0) {
+      const selectedMonth = document.getElementById("filterMonthSelect")?.value || "Semua Bulan";
+
+      let filteredList = marinadeOrdersList;
+      if (selectedMonth !== "Semua Bulan") {
+        filteredList = marinadeOrdersList.filter(item => cleanMonthName(item.month) === selectedMonth);
+      }
+
+      if (filteredList.length === 0) {
         tbody.innerHTML = `
           <tr>
             <td colspan="12" class="p-8 text-center text-slate-400 font-medium">
               <i class="fa-solid fa-box-open text-3xl mb-2 block text-slate-300"></i>
-              Belum ada data tersimpan di database. Silakan isi form di atas.
+              Belum ada data tersimpan untuk filter: <strong>${selectedMonth}</strong>.
             </td>
           </tr>
         `;
@@ -860,12 +864,12 @@
       }
 
       let rows = "";
-      marinadeOrdersList.forEach((item, idx) => {
+      filteredList.forEach((item, idx) => {
         rows += `
           <tr class="hover:bg-slate-50 transition-colors">
             <td class="p-3.5 font-bold text-slate-400">${idx + 1}</td>
             <td class="p-3.5 font-extrabold text-slate-900">${item.storeName}</td>
-            <td class="p-3.5 text-center font-semibold text-slate-600">${item.month}</td>
+            <td class="p-3.5 text-center font-semibold text-slate-600">${cleanMonthName(item.month)}</td>
             <td class="p-3.5 font-semibold text-slate-700">
               <span class="font-bold text-slate-900 block">${item.userNama || '-'}</span>
               <span class="text-[10px] text-slate-400 block">${item.userJabatan || '-'}</span>
@@ -888,16 +892,17 @@
       tbody.innerHTML = rows;
     }
 
-    // RENDERING DASHBOARD REKAP BULANAN & DIAGRAM LINGKARAN (PIE CHART)
     function renderMonthlyDashboard() {
       const selectFilter = document.getElementById("filterMonthSelect");
       if(!selectFilter) return;
 
       const selectedMonth = selectFilter.value;
-      document.getElementById("pieMonthLabel").textContent = selectedMonth || "Bulan";
+      document.getElementById("pieMonthLabel").textContent = selectedMonth || "Semua Bulan";
 
-      // Filter data sesuai bulan yang dipilih
-      const filteredList = marinadeOrdersList.filter(item => item.month === selectedMonth);
+      let filteredList = marinadeOrdersList;
+      if (selectedMonth !== "Semua Bulan") {
+        filteredList = marinadeOrdersList.filter(item => cleanMonthName(item.month) === selectedMonth);
+      }
 
       let mJapfa = 0, mAfco = 0, mDelta = 0, mTotalAyam = 0;
       let mStokAwalPack = 0, mOrderDus = 0, mOrderPack = 0;
@@ -983,7 +988,7 @@
     }
 
     function deleteRecord(id) {
-      if (confirm("Hapus data ini dari database? (Penghapusan hanya dilakukan secara manual)")) {
+      if (confirm("Hapus data ini dari database?")) {
         marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
         localStorage.setItem('marinadeOrdersData_v14', JSON.stringify(marinadeOrdersList));
         renderRecapTable();
@@ -1017,7 +1022,7 @@
           "Jabatan Pengisi": item.userJabatan || "-",
           "Penempatan Store": item.userPenempatan || "-",
           "Nama Store": item.storeName,
-          "Periode Bulan": item.month,
+          "Periode Bulan": cleanMonthName(item.month),
           "Stok Awal Marinade (Pack)": item.stokAwal
         };
 
