@@ -26,6 +26,50 @@
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col relative">
 
+  <!-- MODAL UBAH PIN ADMIN -->
+  <div id="changePinModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 card-shadow border border-slate-100 relative">
+      <div class="text-center mb-4">
+        <div class="w-14 h-14 bg-amber-500/10 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-2 border border-amber-200">
+          <i class="fa-solid fa-key text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-extrabold text-slate-900">Ubah PIN Admin</h3>
+        <p class="text-xs text-slate-500 mt-0.5">Perbarui kata sandi akses otentikasi admin</p>
+      </div>
+
+      <form onsubmit="handleChangePinSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">PIN Lama <span class="text-rose-500">*</span></label>
+          <input type="password" id="inputOldPin" maxlength="10" placeholder="Masukkan PIN lama" required
+                 class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">PIN Baru <span class="text-rose-500">*</span></label>
+          <input type="password" id="inputNewPin" maxlength="10" placeholder="Masukkan PIN baru" required
+                 class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Konfirmasi PIN Baru <span class="text-rose-500">*</span></label>
+          <input type="password" id="inputConfirmPin" maxlength="10" placeholder="Ulangi PIN baru" required
+                 class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <p id="changePinErrorText" class="text-xs text-rose-600 font-bold text-center hidden"></p>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closeChangePinModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            Batal
+          </button>
+          <button type="submit" class="w-1/2 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-amber-600/20 transition-colors">
+            Simpan PIN
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL VERIFIKASI PIN ADMIN -->
   <div id="pinModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 card-shadow border border-slate-100 relative text-center">
@@ -53,35 +97,54 @@
     </div>
   </div>
 
-  <!-- MODAL LOGIN / FORM DATA DIRI -->
-  <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 card-shadow border border-slate-100 relative">
-      <div class="text-center mb-6">
-        <div class="w-16 h-16 bg-amber-500/20 text-amber-600 rounded-3xl flex items-center justify-center mx-auto mb-3 border border-amber-300">
-          <i class="fa-solid fa-user-gear text-3xl"></i>
+  <!-- MODAL LOGIN / FORM IDENTITAS PENGISI (MODERN GLASS & GLOW DESIGN) -->
+  <div id="loginModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-xl z-50 flex items-center justify-center p-4">
+    <div class="bg-white/95 rounded-[2.5rem] max-w-md w-full p-8 card-shadow border border-white/40 relative overflow-hidden">
+      
+      <!-- DEKORASI GLOWING BACKGROUND -->
+      <div class="absolute -top-20 -left-20 w-44 h-44 bg-amber-500/20 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-20 -right-20 w-44 h-44 bg-blue-500/20 rounded-full blur-3xl"></div>
+
+      <div class="text-center mb-6 relative">
+        <!-- SLOT LOGO TAMPILAN AWAL (GANTI PATH SRC INI DENGAN URL LOGO GITHUB ANDA) -->
+        <div class="relative w-20 h-20 mx-auto mb-3 flex items-center justify-center">
+          <div class="absolute inset-0 bg-amber-500/20 rounded-3xl blur-md animate-pulse"></div>
+          <img id="logoTampilanAwal" src="https://via.placeholder.com/150/f59e0b/ffffff?text=LOGO" alt="Logo Tampilan Awal" 
+               class="w-20 h-20 object-contain rounded-3xl border-2 border-amber-400/50 relative z-10 shadow-lg bg-white p-1">
         </div>
-        <h2 class="text-xl font-extrabold text-slate-900">Form Identitas Pengisi</h2>
-        <p class="text-xs text-slate-500 mt-1">Harap isi data diri Anda sebelum mengisi orderan store</p>
+
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Otentikasi Pengisi Data</h2>
+        <p class="text-xs text-slate-500 font-medium mt-1">Sistem Monitoring Order Ayam & Marinade Terpadu</p>
       </div>
 
-      <form onsubmit="handleUserLogin(event)" class="space-y-4">
+      <form onsubmit="handleUserLogin(event)" class="space-y-4 relative">
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Lengkap <span class="text-rose-500">*</span></label>
-          <input type="text" id="loginNama" required placeholder="Contoh: Budi Santoso" class="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl font-bold focus:bg-white focus:ring-2 focus:ring-amber-500">
+          <label class="block text-[11px] font-black text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <i class="fa-solid fa-user text-amber-600"></i> Nama Lengkap <span class="text-rose-500">*</span>
+          </label>
+          <input type="text" id="loginNama" required placeholder="Masukkan Nama Anda..." 
+                 class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Jabatan <span class="text-rose-500">*</span></label>
-          <input type="text" id="loginJabatan" required placeholder="Contoh: Supervisor / Store Manager" class="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl font-bold focus:bg-white focus:ring-2 focus:ring-amber-500">
+          <label class="block text-[11px] font-black text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <i class="fa-solid fa-id-badge text-amber-600"></i> Jabatan / Posisi <span class="text-rose-500">*</span>
+          </label>
+          <input type="text" id="loginJabatan" required placeholder="Contoh: Supervisor / Kasir / Cook" 
+                 class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Penempatan Store (Opsional)</label>
-          <input type="text" id="loginPenempatan" placeholder="Contoh: AGS JOMBANG MOJOAGUNG" class="w-full px-4 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-xl font-medium focus:bg-white focus:ring-2 focus:ring-amber-500">
+          <label class="block text-[11px] font-black text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <i class="fa-solid fa-store text-amber-600"></i> Penempatan Store (Opsional)
+          </label>
+          <input type="text" id="loginPenempatan" placeholder="Contoh: AGS MAGETAN PANGSUD" 
+                 class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
         </div>
 
-        <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white font-extrabold py-3 rounded-xl shadow-lg shadow-amber-600/20 transition-all text-xs flex items-center justify-center gap-2">
-          <i class="fa-solid fa-right-to-bracket"></i> Masuk ke Monitoring Order
+        <button type="submit" class="w-full bg-gradient-to-r from-amber-600 via-amber-700 to-amber-900 hover:from-amber-700 hover:to-amber-950 text-white font-extrabold py-3.5 rounded-2xl shadow-xl shadow-amber-600/30 transition-all text-xs flex items-center justify-center gap-2 mt-2 group">
+          <span>Masuk ke Aplikasi</span>
+          <i class="fa-solid fa-arrow-right text-amber-300 group-hover:translate-x-1 transition-transform"></i>
         </button>
       </form>
     </div>
@@ -91,9 +154,12 @@
   <header class="bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 text-white shadow-xl border-b border-amber-900/40 sticky top-0 z-30 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
-        <div class="w-12 h-12 bg-amber-500/20 rounded-2xl flex items-center justify-center border border-amber-400/30 shadow-inner">
-          <i class="fa-solid fa-drumstick-bite text-2xl text-amber-400"></i>
+        
+        <!-- SLOT LOGO JUDUL UTAMA (GANTI PATH SRC INI DENGAN URL LOGO GITHUB ANDA) -->
+        <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center border border-amber-400/30 shadow-inner overflow-hidden p-1">
+          <img id="logoJudulUtama" src="https://via.placeholder.com/100/f59e0b/ffffff?text=AGS" alt="Logo Utama" class="w-full h-full object-contain rounded-xl">
         </div>
+
         <div>
           <h1 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
             Monitoring Order Ayam 3 Supplier
@@ -103,14 +169,17 @@
         </div>
       </div>
 
-      <!-- KETERANGAN OPERATOR ONLINE -->
-      <div class="flex items-center gap-3 bg-slate-800/80 p-2 rounded-2xl border border-slate-700/80 text-xs shadow-inner">
+      <!-- KETERANGAN OPERATOR ONLINE & TOMBOL UBAH PIN -->
+      <div class="flex items-center gap-2 bg-slate-800/80 p-2 rounded-2xl border border-slate-700/80 text-xs shadow-inner flex-wrap justify-center">
         <div class="px-3 py-1.5 rounded-xl bg-amber-600/30 text-amber-200 font-semibold border border-amber-500/30 flex items-center gap-2">
           <i class="fa-solid fa-user-check text-amber-400"></i> 
           <span>User: <strong id="userDisplayNama" class="text-white">-</strong> (<span id="userDisplayJabatan" class="text-amber-300">-</span>)</span>
         </div>
         <button onclick="openLoginModal()" class="px-2.5 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 text-[11px] font-bold transition-colors">
           Ganti User
+        </button>
+        <button onclick="openChangePinModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-600/80 hover:bg-amber-600 text-white text-[11px] font-bold transition-colors flex items-center gap-1 border border-amber-500/40">
+          <i class="fa-solid fa-key text-[10px]"></i> Ubah PIN Admin
         </button>
       </div>
     </div>
@@ -290,9 +359,9 @@
       </form>
     </div>
 
-    <!-- 2. HASIL ANALISIS ORDER SECTION -->
-    <div id="analysisSection" class="bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-8 relative">
-      <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
+    <!-- 2. HASIL ANALISIS ORDER SECTION (DENGAN TAMBAHAN PROPORSI % SUPPLIER) -->
+    <div id="analysisSection" class="bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-8 relative space-y-6">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
         <div>
           <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
             <i class="fa-solid fa-chart-line text-amber-600"></i> Hasil Analisis Data Order Store
@@ -303,7 +372,7 @@
       </div>
 
       <!-- Summary Metric Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-blue-50/60 border border-blue-200/80 rounded-2xl p-4">
           <span class="text-[11px] font-bold text-blue-900 uppercase tracking-wider block">Marinade Terpakai</span>
           <div class="text-3xl font-black text-blue-900 my-0.5" id="resPemakaianPack">0 <span class="text-xs font-semibold text-slate-400">pack</span></div>
@@ -324,6 +393,36 @@
         </div>
       </div>
 
+      <!-- PENAMBAHAN ANALISIS PERSENTASE 3 SUPPLIER STORE DILAPORKAN -->
+      <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3">
+        <span class="text-xs font-extrabold text-slate-800 uppercase tracking-wider block flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-pie text-amber-600"></i> Persentase Orderan Ayam 3 Supplier Store Ini
+        </span>
+
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <!-- JAPFA PCT -->
+          <div class="bg-blue-100/70 border border-blue-200 rounded-xl p-2.5">
+            <span class="text-[10px] font-bold text-blue-900 uppercase block">Japfa</span>
+            <div id="resJapfaQty" class="text-xs font-black text-blue-900 mt-0.5">0 ekor</div>
+            <span id="resJapfaPct" class="text-xs font-black text-blue-700 bg-white px-2 py-0.5 rounded-md mt-1 inline-block border border-blue-200">0%</span>
+          </div>
+
+          <!-- AFCO PCT -->
+          <div class="bg-amber-100/70 border border-amber-200 rounded-xl p-2.5">
+            <span class="text-[10px] font-bold text-amber-900 uppercase block">Afco</span>
+            <div id="resAfcoQty" class="text-xs font-black text-amber-900 mt-0.5">0 ekor</div>
+            <span id="resAfcoPct" class="text-xs font-black text-amber-800 bg-white px-2 py-0.5 rounded-md mt-1 inline-block border border-amber-200">0%</span>
+          </div>
+
+          <!-- DELTA PCT -->
+          <div class="bg-emerald-100/70 border border-emerald-200 rounded-xl p-2.5">
+            <span class="text-[10px] font-bold text-emerald-900 uppercase block">Delta</span>
+            <div id="resDeltaQty" class="text-xs font-black text-emerald-900 mt-0.5">0 ekor</div>
+            <span id="resDeltaPct" class="text-xs font-black text-emerald-800 bg-white px-2 py-0.5 rounded-md mt-1 inline-block border border-emerald-200">0%</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Rule info -->
       <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-200/60 space-y-1.5 text-xs text-amber-900/90 font-medium">
         <div class="flex items-center gap-1.5 font-bold text-amber-900">
@@ -336,7 +435,7 @@
 
     <!-- 3. RECAP TABLE & DATABASE HISTORY SECTION -->
     <div id="recapTableSection" class="bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-8 space-y-5">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 border-b border-slate-100 pb-4">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-100 pb-4">
         <div>
           <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
             <i class="fa-solid fa-database text-amber-600"></i> Database Order Ayam & Marinade (Live Global)
@@ -344,16 +443,26 @@
           <p class="text-xs text-slate-400 mt-0.5">Tersimpan permanen & diperbarui otomatis dari seluruh pengguna</p>
         </div>
 
-        <div class="flex items-center gap-2">
-          <button onclick="fetchCloudData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 transition-all">
-            <i class="fa-solid fa-rotate mr-1 text-slate-500"></i>Refresh Live
-          </button>
-          <button onclick="exportToExcelFormatted()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/10">
-            <i class="fa-solid fa-file-excel"></i> Download Excel (.xlsx) Rapi
-          </button>
-          <button onclick="triggerResetWithPin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-rose-200 transition-all flex items-center gap-1">
-            <i class="fa-solid fa-lock text-[10px]"></i> <i class="fa-solid fa-trash-can mr-1"></i>Reset
-          </button>
+        <!-- INPUT PENCARIAN STORE & ACTION BUTTONS -->
+        <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full md:w-auto">
+          <!-- Live Search Input -->
+          <div class="relative w-full sm:w-64">
+            <input type="text" id="searchStoreInput" oninput="renderRecapTable()" placeholder="Cari nama store..." 
+                   class="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500 shadow-sm">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <button onclick="fetchCloudData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl border border-slate-200 transition-all">
+              <i class="fa-solid fa-rotate mr-1 text-slate-500"></i>Refresh Live
+            </button>
+            <button onclick="exportToExcelFormatted()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/10 whitespace-nowrap">
+              <i class="fa-solid fa-file-excel"></i> Excel (.xlsx)
+            </button>
+            <button onclick="triggerResetWithPin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-2 rounded-xl border border-rose-200 transition-all flex items-center gap-1">
+              <i class="fa-solid fa-lock text-[10px]"></i> <i class="fa-solid fa-trash-can mr-1"></i>Reset
+            </button>
+          </div>
         </div>
       </div>
 
@@ -502,8 +611,9 @@
 
   <!-- SCRIPT LOGIC -->
   <script>
-    // PIN ADMIN (KATA SANDI DEFENSE SYSTEM) - BISA DIUBAH SESUAI KEINGINAN
-    const ADMIN_PIN = "1234"; 
+    function getStoredAdminPin() {
+      return localStorage.getItem('appAdminPin_v1') || "1234";
+    }
 
     const MARINADE_STORE_DATA = [
       {"name": "AGS JOMBANG PLOSO", "stokAwal": 26, "ayamAwal": 280},
@@ -579,7 +689,6 @@
     let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v14') || '[]');
     let supplierPieChartInstance = null;
 
-    // VARIABEL STATE AKSI SENSITIF TERPENDAM (DELETE / RESET)
     let pendingAction = null; 
 
     function cleanMonthName(rawMonth) {
@@ -820,6 +929,23 @@
       document.getElementById("resOrderDus").textContent = `${orderDus} DUS`;
       document.getElementById("resOrderPack").textContent = `(${orderPack} Pack Marinade)`;
 
+      // HITUNG DAN TAMPILKAN PERSENTASE 3 SUPPLIER DI HASIL ANALISIS STORE
+      let pJapfa = 0, pAfco = 0, pDelta = 0;
+      if (totals.grandTotal > 0) {
+        pJapfa = Math.round((totals.japfaSum / totals.grandTotal) * 100);
+        pAfco = Math.round((totals.afcoSum / totals.grandTotal) * 100);
+        pDelta = 100 - pJapfa - pAfco;
+      }
+
+      document.getElementById("resJapfaQty").textContent = `${totals.japfaSum.toLocaleString('id-ID')} ekor`;
+      document.getElementById("resJapfaPct").textContent = `${pJapfa}% Proporsi`;
+
+      document.getElementById("resAfcoQty").textContent = `${totals.afcoSum.toLocaleString('id-ID')} ekor`;
+      document.getElementById("resAfcoPct").textContent = `${pAfco}% Proporsi`;
+
+      document.getElementById("resDeltaQty").textContent = `${totals.deltaSum.toLocaleString('id-ID')} ekor`;
+      document.getElementById("resDeltaPct").textContent = `${pDelta}% Proporsi`;
+
       const newRecord = {
         id: Date.now(),
         userNama: currentUser.nama,
@@ -876,10 +1002,16 @@
     function renderRecapTable() {
       const tbody = document.getElementById("recapTableBody");
       const selectedMonth = document.getElementById("filterMonthSelect")?.value || "Semua Bulan";
+      const searchQuery = (document.getElementById("searchStoreInput")?.value || "").trim().toLowerCase();
 
       let filteredList = marinadeOrdersList;
+
       if (selectedMonth !== "Semua Bulan") {
-        filteredList = marinadeOrdersList.filter(item => cleanMonthName(item.month) === selectedMonth);
+        filteredList = filteredList.filter(item => cleanMonthName(item.month) === selectedMonth);
+      }
+
+      if (searchQuery !== "") {
+        filteredList = filteredList.filter(item => (item.storeName || "").toLowerCase().includes(searchQuery));
       }
 
       if (filteredList.length === 0) {
@@ -887,7 +1019,7 @@
           <tr>
             <td colspan="12" class="p-8 text-center text-slate-400 font-medium">
               <i class="fa-solid fa-box-open text-3xl mb-2 block text-slate-300"></i>
-              Belum ada data tersimpan untuk filter: <strong>${selectedMonth}</strong>.
+              Tidak ada data yang cocok dengan kriteria pencarian/filter.
             </td>
           </tr>
         `;
@@ -1018,7 +1150,51 @@
       });
     }
 
-    // FUNGSI MANAJEMEN PIN ADMIN & MODAL LOGIC
+    function openChangePinModal() {
+      document.getElementById("inputOldPin").value = "";
+      document.getElementById("inputNewPin").value = "";
+      document.getElementById("inputConfirmPin").value = "";
+      document.getElementById("changePinErrorText").classList.add("hidden");
+      document.getElementById("changePinModal").classList.remove("hidden");
+      document.getElementById("inputOldPin").focus();
+    }
+
+    function closeChangePinModal() {
+      document.getElementById("changePinModal").classList.add("hidden");
+    }
+
+    function handleChangePinSubmit(e) {
+      e.preventDefault();
+      const oldPin = document.getElementById("inputOldPin").value;
+      const newPin = document.getElementById("inputNewPin").value;
+      const confirmPin = document.getElementById("inputConfirmPin").value;
+      const errorText = document.getElementById("changePinErrorText");
+
+      const currentAdminPin = getStoredAdminPin();
+
+      if (oldPin !== currentAdminPin) {
+        errorText.textContent = "PIN Lama Salah!";
+        errorText.classList.remove("hidden");
+        return;
+      }
+
+      if (newPin !== confirmPin) {
+        errorText.textContent = "Konfirmasi PIN Baru Tidak Cocok!";
+        errorText.classList.remove("hidden");
+        return;
+      }
+
+      if (newPin.trim().length < 4) {
+        errorText.textContent = "PIN Minimal 4 Karakter!";
+        errorText.classList.remove("hidden");
+        return;
+      }
+
+      localStorage.setItem('appAdminPin_v1', newPin.trim());
+      alert("PIN Admin Berhasil Diperbarui!");
+      closeChangePinModal();
+    }
+
     function triggerDeleteWithPin(id) {
       pendingAction = { type: 'delete', id: id };
       document.getElementById("pinModalSub").textContent = "Masukkan PIN Admin untuk menghapus baris data ini.";
@@ -1046,8 +1222,9 @@
     function handlePinSubmit(e) {
       e.preventDefault();
       const enteredPin = document.getElementById("inputAdminPin").value;
+      const currentAdminPin = getStoredAdminPin();
 
-      if (enteredPin === ADMIN_PIN) {
+      if (enteredPin === currentAdminPin) {
         document.getElementById("pinModal").classList.add("hidden");
         
         if (pendingAction && pendingAction.type === 'delete') {
