@@ -26,6 +26,33 @@
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col relative">
 
+  <!-- MODAL VERIFIKASI PIN ADMIN -->
+  <div id="pinModal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 card-shadow border border-slate-100 relative text-center">
+      <div class="w-14 h-14 bg-rose-500/10 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-rose-200">
+        <i class="fa-solid fa-lock text-2xl"></i>
+      </div>
+      <h3 class="text-lg font-extrabold text-slate-900">Otentikasi PIN Admin</h3>
+      <p id="pinModalSub" class="text-xs text-slate-500 mt-1 mb-4">Masukkan PIN Admin untuk melakukan aksi ini.</p>
+      
+      <form onsubmit="handlePinSubmit(event)" class="space-y-4">
+        <input type="password" id="inputAdminPin" maxlength="10" placeholder="Masukkan PIN Admin..." required 
+               class="w-full text-center tracking-widest text-lg font-black px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl focus:bg-white focus:ring-2 focus:ring-rose-500">
+        
+        <p id="pinErrorText" class="text-xs text-rose-600 font-bold hidden">PIN Admin Salah! Akses ditolak.</p>
+
+        <div class="flex gap-2">
+          <button type="button" onclick="closePinModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
+            Batal
+          </button>
+          <button type="submit" class="w-1/2 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-rose-600/20 transition-colors">
+            Konfirmasi
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL LOGIN / FORM DATA DIRI -->
   <div id="loginModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 card-shadow border border-slate-100 relative">
@@ -303,7 +330,7 @@
           <i class="fa-solid fa-circle-info text-amber-600"></i> Ketentuan Bumbu Marinade
         </div>
         <p>• Kebutuhan bumbu marinade <strong>hanya dihitung dari akumulasi Ayam Japfa</strong>.</p>
-        <p>• Jika Sisa Stok Japfa <strong>&lt; 8 pack</strong>  Otomatis merekomendasikan <strong>Order 1 Dus (20 Pack)</strong>.</p>
+        <p>• Jika Sisa Stok Japfa <strong>&lt; 8 pack</strong> $\rightarrow$ Otomatis merekomendasikan <strong>Order 1 Dus (20 Pack)</strong>.</p>
       </div>
     </div>
 
@@ -324,8 +351,8 @@
           <button onclick="exportToExcelFormatted()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/10">
             <i class="fa-solid fa-file-excel"></i> Download Excel (.xlsx) Rapi
           </button>
-          <button onclick="clearAllData()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-rose-200 transition-all">
-            <i class="fa-solid fa-trash-can mr-1"></i>Reset
+          <button onclick="triggerResetWithPin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-2.5 rounded-xl border border-rose-200 transition-all flex items-center gap-1">
+            <i class="fa-solid fa-lock text-[10px]"></i> <i class="fa-solid fa-trash-can mr-1"></i>Reset
           </button>
         </div>
       </div>
@@ -475,6 +502,9 @@
 
   <!-- SCRIPT LOGIC -->
   <script>
+    // PIN ADMIN (KATA SANDI DEFENSE SYSTEM) - BISA DIUBAH SESUAI KEINGINAN
+    const ADMIN_PIN = "1234"; 
+
     const MARINADE_STORE_DATA = [
       {"name": "AGS JOMBANG PLOSO", "stokAwal": 26, "ayamAwal": 280},
       {"name": "AGS PASURUAN indragiri", "stokAwal": 16, "ayamAwal": 160},
@@ -542,14 +572,16 @@
       {"name": "AGS MOJOKERTO MERI", "stokAwal": 20, "ayamAwal": 200}
     ];
 
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvgPbSCe-VUm-89J0nMd86BwatuCOHFVdBPNOVrVGjQ0TbICMCfEZN6PXkvZudeQHaCQ/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa603zBWU-r_y56EvWqyUA9FCKc084ZcYD4607UNz3E7oiW2IUoCGGcG6YbHvpYqXUSg/exec";
 
     let currentUser = JSON.parse(localStorage.getItem('currentUser_v14') || 'null');
     let columnCounts = { japfa: 4, afco: 4, delta: 4 };
     let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v14') || '[]');
     let supplierPieChartInstance = null;
 
-    // FUNGSI PEMBERSIH BULAN (Normalisasi agar data lama & baru tetap cocok)
+    // VARIABEL STATE AKSI SENSITIF TERPENDAM (DELETE / RESET)
+    let pendingAction = null; 
+
     function cleanMonthName(rawMonth) {
       if(!rawMonth) return "";
       const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -566,7 +598,6 @@
       renderSupplierInputs('delta');
       populateDatalist();
 
-      // Normalisasi bulan di semua data lokal yang sudah tersimpan sebelumnya
       marinadeOrdersList = marinadeOrdersList.map(item => ({
         ...item,
         month: cleanMonthName(item.month)
@@ -882,8 +913,8 @@
             <td class="p-3.5 text-center font-black ${item.sisaStok < 8 ? 'text-rose-600' : 'text-slate-800'}">${item.sisaStok || 0}</td>
             <td class="p-3.5 text-center font-black text-amber-900 bg-amber-100">${item.orderDus || 0} DUS (${item.orderPack || 0} pck)</td>
             <td class="p-3.5 text-center">
-              <button onclick="deleteRecord(${item.id})" class="text-slate-400 hover:text-rose-600 p-1 rounded-lg transition-colors" title="Hapus Manual Data Ini">
-                <i class="fa-solid fa-trash-can"></i>
+              <button onclick="triggerDeleteWithPin(${item.id})" class="text-slate-400 hover:text-rose-600 p-1 rounded-lg transition-colors" title="Hapus Manual Data Ini (Butuh PIN Admin)">
+                <i class="fa-solid fa-lock text-[9px] mr-0.5 text-slate-300"></i><i class="fa-solid fa-trash-can"></i>
               </button>
             </td>
           </tr>
@@ -987,22 +1018,63 @@
       });
     }
 
-    function deleteRecord(id) {
-      if (confirm("Hapus data ini dari database?")) {
-        marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
-        localStorage.setItem('marinadeOrdersData_v14', JSON.stringify(marinadeOrdersList));
-        renderRecapTable();
-        renderMonthlyDashboard();
+    // FUNGSI MANAJEMEN PIN ADMIN & MODAL LOGIC
+    function triggerDeleteWithPin(id) {
+      pendingAction = { type: 'delete', id: id };
+      document.getElementById("pinModalSub").textContent = "Masukkan PIN Admin untuk menghapus baris data ini.";
+      openPinModal();
+    }
+
+    function triggerResetWithPin() {
+      pendingAction = { type: 'reset' };
+      document.getElementById("pinModalSub").textContent = "Konfirmasi PIN Admin untuk mereset seluruh database.";
+      openPinModal();
+    }
+
+    function openPinModal() {
+      document.getElementById("inputAdminPin").value = "";
+      document.getElementById("pinErrorText").classList.add("hidden");
+      document.getElementById("pinModal").classList.remove("hidden");
+      document.getElementById("inputAdminPin").focus();
+    }
+
+    function closePinModal() {
+      document.getElementById("pinModal").classList.add("hidden");
+      pendingAction = null;
+    }
+
+    function handlePinSubmit(e) {
+      e.preventDefault();
+      const enteredPin = document.getElementById("inputAdminPin").value;
+
+      if (enteredPin === ADMIN_PIN) {
+        document.getElementById("pinModal").classList.add("hidden");
+        
+        if (pendingAction && pendingAction.type === 'delete') {
+          executeDeleteRecord(pendingAction.id);
+        } else if (pendingAction && pendingAction.type === 'reset') {
+          executeClearAllData();
+        }
+        pendingAction = null;
+      } else {
+        document.getElementById("pinErrorText").classList.remove("hidden");
+        document.getElementById("inputAdminPin").value = "";
+        document.getElementById("inputAdminPin").focus();
       }
     }
 
-    function clearAllData() {
-      if (confirm("Reset seluruh data di database? Data terhapus tidak dapat dikembalikan.")) {
-        marinadeOrdersList = [];
-        localStorage.removeItem('marinadeOrdersData_v14');
-        renderRecapTable();
-        renderMonthlyDashboard();
-      }
+    function executeDeleteRecord(id) {
+      marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
+      localStorage.setItem('marinadeOrdersData_v14', JSON.stringify(marinadeOrdersList));
+      renderRecapTable();
+      renderMonthlyDashboard();
+    }
+
+    function executeClearAllData() {
+      marinadeOrdersList = [];
+      localStorage.removeItem('marinadeOrdersData_v14');
+      renderRecapTable();
+      renderMonthlyDashboard();
     }
 
     function exportToExcelFormatted() {
