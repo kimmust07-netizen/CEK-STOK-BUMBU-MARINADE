@@ -8,9 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- SheetJS Library untuk Ekspor Excel Rapi (.xlsx) -->
+  <!-- SheetJS & Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <!-- Chart.js Library untuk Diagram Lingkaran (Pie Chart) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
@@ -40,31 +39,20 @@
       <form onsubmit="handleChangePinSubmit(event)" class="space-y-3">
         <div>
           <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">PIN Lama <span class="text-rose-500">*</span></label>
-          <input type="password" id="inputOldPin" maxlength="10" placeholder="Masukkan PIN lama" required
-                 class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
+          <input type="password" id="inputOldPin" maxlength="10" placeholder="Masukkan PIN lama" required class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
         </div>
-
         <div>
           <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">PIN Baru <span class="text-rose-500">*</span></label>
-          <input type="password" id="inputNewPin" maxlength="10" placeholder="Masukkan PIN baru" required
-                 class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
+          <input type="password" id="inputNewPin" maxlength="10" placeholder="Masukkan PIN baru" required class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
         </div>
-
         <div>
           <label class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Konfirmasi PIN Baru <span class="text-rose-500">*</span></label>
-          <input type="password" id="inputConfirmPin" maxlength="10" placeholder="Ulangi PIN baru" required
-                 class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
+          <input type="password" id="inputConfirmPin" maxlength="10" placeholder="Ulangi PIN baru" required class="w-full text-center tracking-widest text-sm font-bold px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500">
         </div>
-
         <p id="changePinErrorText" class="text-xs text-rose-600 font-bold text-center hidden"></p>
-
         <div class="flex gap-2 pt-2">
-          <button type="button" onclick="closeChangePinModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
-            Batal
-          </button>
-          <button type="submit" class="w-1/2 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-amber-600/20 transition-colors">
-            Simpan PIN
-          </button>
+          <button type="button" onclick="closeChangePinModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">Batal</button>
+          <button type="submit" class="w-1/2 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-amber-600/20 transition-colors">Simpan PIN</button>
         </div>
       </form>
     </div>
@@ -80,39 +68,27 @@
       <p id="pinModalSub" class="text-xs text-slate-500 mt-1 mb-4">Masukkan PIN Admin untuk melakukan aksi ini.</p>
       
       <form onsubmit="handlePinSubmit(event)" class="space-y-4">
-        <input type="password" id="inputAdminPin" maxlength="10" placeholder="Masukkan PIN Admin..." required 
-               class="w-full text-center tracking-widest text-lg font-black px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl focus:bg-white focus:ring-2 focus:ring-rose-500">
-        
+        <input type="password" id="inputAdminPin" maxlength="10" placeholder="Masukkan PIN Admin..." required class="w-full text-center tracking-widest text-lg font-black px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl focus:bg-white focus:ring-2 focus:ring-rose-500">
         <p id="pinErrorText" class="text-xs text-rose-600 font-bold hidden">PIN Admin Salah! Akses ditolak.</p>
-
         <div class="flex gap-2">
-          <button type="button" onclick="closePinModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">
-            Batal
-          </button>
-          <button type="submit" class="w-1/2 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-rose-600/20 transition-colors">
-            Konfirmasi
-          </button>
+          <button type="button" onclick="closePinModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition-colors">Batal</button>
+          <button type="submit" class="w-1/2 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md shadow-rose-600/20 transition-colors">Konfirmasi</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL LOGIN / FORM IDENTITAS PENGISI (MODERN GLASS & GLOW DESIGN) -->
+  <!-- MODAL LOGIN / FORM IDENTITAS PENGISI -->
   <div id="loginModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-xl z-50 flex items-center justify-center p-4">
     <div class="bg-white/95 rounded-[2.5rem] max-w-md w-full p-8 card-shadow border border-white/40 relative overflow-hidden">
-      
-      <!-- DEKORASI GLOWING BACKGROUND -->
       <div class="absolute -top-20 -left-20 w-44 h-44 bg-amber-500/20 rounded-full blur-3xl"></div>
       <div class="absolute -bottom-20 -right-20 w-44 h-44 bg-blue-500/20 rounded-full blur-3xl"></div>
 
       <div class="text-center mb-6 relative">
-        <!-- SLOT LOGO TAMPILAN AWAL (GANTI PATH SRC INI DENGAN URL LOGO GITHUB ANDA) -->
         <div class="relative w-20 h-20 mx-auto mb-3 flex items-center justify-center">
           <div class="absolute inset-0 bg-amber-500/20 rounded-3xl blur-md animate-pulse"></div>
-          <img id="logoTampilanAwal" src="logo sa'i.png" alt="Logo Tampilan Awal" 
-               class="w-20 h-20 object-contain rounded-3xl border-2 border-amber-400/50 relative z-10 shadow-lg bg-white p-1">
+          <img id="logoTampilanAwal" src="https://via.placeholder.com/150/f59e0b/ffffff?text=LOGO" alt="Logo Tampilan Awal" class="w-20 h-20 object-contain rounded-3xl border-2 border-amber-400/50 relative z-10 shadow-lg bg-white p-1">
         </div>
-
         <h2 class="text-2xl font-black text-slate-900 tracking-tight">Otentikasi Pengisi Data</h2>
         <p class="text-xs text-slate-500 font-medium mt-1">Sistem Monitoring Order Ayam & Marinade Terpadu</p>
       </div>
@@ -122,26 +98,20 @@
           <label class="block text-[11px] font-black text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
             <i class="fa-solid fa-user text-amber-600"></i> Nama Lengkap <span class="text-rose-500">*</span>
           </label>
-          <input type="text" id="loginNama" required placeholder="Masukkan Nama Anda..." 
-                 class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
+          <input type="text" id="loginNama" required placeholder="Masukkan Nama Anda..." class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
         </div>
-
         <div>
           <label class="block text-[11px] font-black text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
             <i class="fa-solid fa-id-badge text-amber-600"></i> Jabatan / Posisi <span class="text-rose-500">*</span>
           </label>
-          <input type="text" id="loginJabatan" required placeholder="Contoh: Supervisor / Kasir / Cook" 
-                 class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
+          <input type="text" id="loginJabatan" required placeholder="Contoh: Supervisor / Kasir / Cook" class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
         </div>
-
         <div>
           <label class="block text-[11px] font-black text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1">
             <i class="fa-solid fa-store text-amber-600"></i> Penempatan Store (Opsional)
           </label>
-          <input type="text" id="loginPenempatan" placeholder="Contoh: AGS MAGETAN PANGSUD" 
-                 class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
+          <input type="text" id="loginPenempatan" placeholder="Contoh: AGS MAGETAN PANGSUD" class="w-full px-4 py-3 text-xs bg-slate-50/80 border border-slate-200 rounded-2xl font-bold text-slate-900 focus:bg-white focus:ring-2 focus:ring-amber-500 transition-all shadow-inner">
         </div>
-
         <button type="submit" class="w-full bg-gradient-to-r from-amber-600 via-amber-700 to-amber-900 hover:from-amber-700 hover:to-amber-950 text-white font-extrabold py-3.5 rounded-2xl shadow-xl shadow-amber-600/30 transition-all text-xs flex items-center justify-center gap-2 mt-2 group">
           <span>Masuk ke Aplikasi</span>
           <i class="fa-solid fa-arrow-right text-amber-300 group-hover:translate-x-1 transition-transform"></i>
@@ -154,30 +124,24 @@
   <header class="bg-gradient-to-r from-slate-900 via-amber-950 to-slate-900 text-white shadow-xl border-b border-amber-900/40 sticky top-0 z-30 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-3.5">
-        
-        <!-- SLOT LOGO JUDUL UTAMA (GANTI PATH SRC INI DENGAN URL LOGO GITHUB ANDA) -->
         <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center border border-amber-400/30 shadow-inner overflow-hidden p-1">
           <img id="logoJudulUtama" src="https://via.placeholder.com/100/f59e0b/ffffff?text=AGS" alt="Logo Utama" class="w-full h-full object-contain rounded-xl">
         </div>
-
         <div>
           <h1 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
             Monitoring Order Ayam 3 Supplier
-            <span class="bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs px-2.5 py-0.5 rounded-full font-semibold">Dinamis 4-10 Kirim</span>
+            <span class="bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs px-2.5 py-0.5 rounded-full font-semibold">Dinamis 2026-2028</span>
           </h1>
           <p class="text-xs text-amber-200/80">Japfa | Afco | Delta — Database Terpusat Real-Time</p>
         </div>
       </div>
 
-      <!-- KETERANGAN OPERATOR ONLINE & TOMBOL UBAH PIN -->
       <div class="flex items-center gap-2 bg-slate-800/80 p-2 rounded-2xl border border-slate-700/80 text-xs shadow-inner flex-wrap justify-center">
         <div class="px-3 py-1.5 rounded-xl bg-amber-600/30 text-amber-200 font-semibold border border-amber-500/30 flex items-center gap-2">
           <i class="fa-solid fa-user-check text-amber-400"></i> 
           <span>User: <strong id="userDisplayNama" class="text-white">-</strong> (<span id="userDisplayJabatan" class="text-amber-300">-</span>)</span>
         </div>
-        <button onclick="openLoginModal()" class="px-2.5 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 text-[11px] font-bold transition-colors">
-          Ganti User
-        </button>
+        <button onclick="openLoginModal()" class="px-2.5 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 text-[11px] font-bold transition-colors">Ganti User</button>
         <button onclick="openChangePinModal()" class="px-2.5 py-1.5 rounded-xl bg-amber-600/80 hover:bg-amber-600 text-white text-[11px] font-bold transition-colors flex items-center gap-1 border border-amber-500/40">
           <i class="fa-solid fa-key text-[10px]"></i> Ubah PIN Admin
         </button>
@@ -197,36 +161,46 @@
           <span class="w-9 h-9 bg-amber-100 text-amber-800 rounded-xl flex items-center justify-center font-extrabold text-sm">1</span>
           <div>
             <h2 class="text-lg font-extrabold text-slate-900">Form Input Order Ayam & Marinade</h2>
-            <p class="text-xs text-slate-400">Tersimpan ke Database Cloud (Bisa Diakses Semua Orang)</p>
+            <p class="text-xs text-slate-400">Pembatasan Pengisian Max 2 Bulan Ke Depan</p>
           </div>
         </div>
-        <div class="flex items-center gap-2">
-          <span id="syncBadgeStatus" class="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Auto-Sync Live
-          </span>
-        </div>
+        <span id="syncBadgeStatus" class="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Auto-Sync Live
+        </span>
       </div>
 
       <form id="marinadeForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
         
-        <!-- Store, Month & Initial Stock Input -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <!-- 1. Store -->
+        <!-- Store, Year, Month & Initial Stock Input -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <!-- Store -->
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">1. Nama Store <span class="text-rose-500">*</span></label>
             <div class="relative">
-              <input type="text" id="inputStoreName" list="storeDatalist" placeholder="Ketik/Pilih Store..." required onchange="onStoreSelect(this.value)"
-                     class="input-focus w-full pl-9 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
+              <input type="text" id="inputStoreName" list="storeDatalist" placeholder="Ketik/Pilih Store..." required onchange="onStoreSelect(this.value)" class="input-focus w-full pl-9 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
               <i class="fa-solid fa-shop absolute left-3 top-3.5 text-slate-400 text-xs"></i>
             </div>
             <datalist id="storeDatalist"></datalist>
           </div>
 
-          <!-- 2. Month (HANYA BULAN) -->
+          <!-- Pilihan Tahun (2026-2028) -->
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">2. Periode Bulan <span class="text-rose-500">*</span></label>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">2. Pilih Tahun <span class="text-rose-500">*</span></label>
             <div class="relative">
-              <select id="inputMonth" required onchange="syncMonthFilterWithForm(this.value)" class="input-focus w-full pl-8 pr-2 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-2xl font-semibold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
+              <select id="inputYear" required onchange="updateMonthLimits(); syncFilterYearWithForm(this.value);" class="input-focus w-full pl-8 pr-2 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-2xl font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
+                <option value="2026" selected>2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+              </select>
+              <i class="fa-solid fa-calendar-alt absolute left-2.5 top-3.5 text-slate-400 text-xs"></i>
+            </div>
+          </div>
+
+          <!-- Periode Bulan (Dibatasi 2 Bulan Ke Depan) -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">3. Periode Bulan <span class="text-rose-500">*</span></label>
+            <div class="relative">
+              <select id="inputMonth" required class="input-focus w-full pl-8 pr-2 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-2xl font-semibold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500">
                 <option value="Januari">Januari</option>
                 <option value="Februari">Februari</option>
                 <option value="Maret">Maret</option>
@@ -237,19 +211,18 @@
                 <option value="Agustus">Agustus</option>
                 <option value="September">September</option>
                 <option value="Oktober">Oktober</option>
-                <option value="November" selected>November</option>
+                <option value="November">November</option>
                 <option value="Desember">Desember</option>
               </select>
               <i class="fa-solid fa-calendar-days absolute left-2.5 top-3.5 text-slate-400 text-xs"></i>
             </div>
           </div>
 
-          <!-- 3. Initial Stock -->
+          <!-- Stok Awal -->
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">3. Stok Awal Marinade <span class="text-rose-500">*</span></label>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">4. Stok Awal Marinade <span class="text-rose-500">*</span></label>
             <div class="relative">
-              <input type="number" id="inputStokAwal" min="0" placeholder="0" required 
-                     class="input-focus w-full pl-9 pr-14 py-2.5 text-xs bg-amber-50/60 border border-amber-300 rounded-2xl font-black text-amber-900 focus:bg-white focus:ring-2 focus:ring-amber-500">
+              <input type="number" id="inputStokAwal" min="0" placeholder="0" required class="input-focus w-full pl-9 pr-14 py-2.5 text-xs bg-amber-50/60 border border-amber-300 rounded-2xl font-black text-amber-900 focus:bg-white focus:ring-2 focus:ring-amber-500">
               <i class="fa-solid fa-boxes-stacked absolute left-3 top-3.5 text-amber-600 text-xs"></i>
               <span class="absolute right-2.5 top-2.5 text-[10px] font-bold text-amber-700 bg-amber-200/60 px-1.5 py-1 rounded-lg">PACK</span>
             </div>
@@ -258,100 +231,67 @@
 
         <!-- 3 SUPPLIER CONTAINER -->
         <div class="space-y-4 pt-2">
-          
-          <!-- SUPPLIER 1: JAPFA -->
+          <!-- JAPFA -->
           <div class="bg-blue-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200/80 space-y-3">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <label class="text-xs font-extrabold text-blue-900 uppercase tracking-wider flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-                1. Supplier JAPFA (<span id="count_japfa">4</span>x Kirim)
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> 1. Supplier JAPFA (<span id="count_japfa">4</span>x Kirim)
               </label>
               <div class="flex items-center gap-1.5">
-                <button type="button" onclick="changeColumnCount('japfa', -1)" class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold px-2 py-1 rounded-lg border border-blue-300 transition-colors">
-                  <i class="fa-solid fa-minus mr-0.5"></i> Kurangi
-                </button>
-                <button type="button" onclick="changeColumnCount('japfa', 1)" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg transition-colors">
-                  <i class="fa-solid fa-plus mr-0.5"></i> Tambah Kirim
-                </button>
+                <button type="button" onclick="changeColumnCount('japfa', -1)" class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold px-2 py-1 rounded-lg border border-blue-300"><i class="fa-solid fa-minus"></i> Kurangi</button>
+                <button type="button" onclick="changeColumnCount('japfa', 1)" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg"><i class="fa-solid fa-plus"></i> Tambah Kirim</button>
                 <span class="text-[10px] font-bold text-blue-700 bg-blue-100/80 px-2 py-1 rounded-md">Basis Marinade</span>
               </div>
             </div>
-
             <div id="grid_japfa" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-1.5"></div>
-
-            <div>
-              <input type="text" id="ket_japfa" placeholder="Keterangan Hari Pengiriman Japfa (Contoh: Senin & Kamis Pagi)..." class="w-full py-1.5 px-3 text-xs bg-white border border-blue-200 rounded-xl font-medium text-blue-900 placeholder:text-blue-300">
-            </div>
-
+            <input type="text" id="ket_japfa" placeholder="Keterangan Hari Pengiriman Japfa..." class="w-full py-1.5 px-3 text-xs bg-white border border-blue-200 rounded-xl font-medium text-blue-900">
             <div class="flex justify-between items-center text-xs font-bold text-blue-900 pt-1">
               <span>Total Ayam Japfa:</span>
               <span id="displayJapfaTotal" class="bg-blue-100 px-2.5 py-0.5 rounded-lg border border-blue-300">0 Ekor</span>
             </div>
           </div>
 
-          <!-- SUPPLIER 2: AFCO -->
+          <!-- AFCO -->
           <div class="bg-amber-50/60 p-4 sm:p-5 rounded-2xl border border-amber-200/80 space-y-3">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <label class="text-xs font-extrabold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                2. Supplier AFCO (<span id="count_afco">4</span>x Kirim)
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> 2. Supplier AFCO (<span id="count_afco">4</span>x Kirim)
               </label>
               <div class="flex items-center gap-1.5">
-                <button type="button" onclick="changeColumnCount('afco', -1)" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-[10px] font-bold px-2 py-1 rounded-lg border border-amber-300 transition-colors">
-                  <i class="fa-solid fa-minus mr-0.5"></i> Kurangi
-                </button>
-                <button type="button" onclick="changeColumnCount('afco', 1)" class="bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg transition-colors">
-                  <i class="fa-solid fa-plus mr-0.5"></i> Tambah Kirim
-                </button>
+                <button type="button" onclick="changeColumnCount('afco', -1)" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-[10px] font-bold px-2 py-1 rounded-lg border border-amber-300"><i class="fa-solid fa-minus"></i> Kurangi</button>
+                <button type="button" onclick="changeColumnCount('afco', 1)" class="bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg"><i class="fa-solid fa-plus"></i> Tambah Kirim</button>
                 <span class="text-[10px] font-bold text-amber-700 bg-amber-100/80 px-2 py-1 rounded-md">Tanpa Marinade</span>
               </div>
             </div>
-
             <div id="grid_afco" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-1.5"></div>
-
-            <div>
-              <input type="text" id="ket_afco" placeholder="Keterangan Hari Pengiriman Afco (Contoh: Selasa & Jumat)..." class="w-full py-1.5 px-3 text-xs bg-white border border-amber-200 rounded-xl font-medium text-amber-900 placeholder:text-amber-300">
-            </div>
-
+            <input type="text" id="ket_afco" placeholder="Keterangan Hari Pengiriman Afco..." class="w-full py-1.5 px-3 text-xs bg-white border border-amber-200 rounded-xl font-medium text-amber-900">
             <div class="flex justify-between items-center text-xs font-bold text-amber-900 pt-1">
               <span>Total Ayam Afco:</span>
               <span id="displayAfcoTotal" class="bg-amber-100 px-2.5 py-0.5 rounded-lg border border-amber-300">0 Ekor</span>
             </div>
           </div>
 
-          <!-- SUPPLIER 3: DELTA -->
+          <!-- DELTA -->
           <div class="bg-emerald-50/60 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 space-y-3">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <label class="text-xs font-extrabold text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-                3. Supplier DELTA (<span id="count_delta">4</span>x Kirim)
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> 3. Supplier DELTA (<span id="count_delta">4</span>x Kirim)
               </label>
               <div class="flex items-center gap-1.5">
-                <button type="button" onclick="changeColumnCount('delta', -1)" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded-lg border border-emerald-300 transition-colors">
-                  <i class="fa-solid fa-minus mr-0.5"></i> Kurangi
-                </button>
-                <button type="button" onclick="changeColumnCount('delta', 1)" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg transition-colors">
-                  <i class="fa-solid fa-plus mr-0.5"></i> Tambah Kirim
-                </button>
+                <button type="button" onclick="changeColumnCount('delta', -1)" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded-lg border border-emerald-300"><i class="fa-solid fa-minus"></i> Kurangi</button>
+                <button type="button" onclick="changeColumnCount('delta', 1)" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2 py-1 rounded-lg"><i class="fa-solid fa-plus"></i> Tambah Kirim</button>
                 <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-1 rounded-md">Tanpa Marinade</span>
               </div>
             </div>
-
             <div id="grid_delta" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-1.5"></div>
-
-            <div>
-              <input type="text" id="ket_delta" placeholder="Keterangan Hari Pengiriman Delta (Contoh: Rabu & Sabtu)..." class="w-full py-1.5 px-3 text-xs bg-white border border-emerald-200 rounded-xl font-medium text-emerald-900 placeholder:text-emerald-300">
-            </div>
-
+            <input type="text" id="ket_delta" placeholder="Keterangan Hari Pengiriman Delta..." class="w-full py-1.5 px-3 text-xs bg-white border border-emerald-200 rounded-xl font-medium text-emerald-900">
             <div class="flex justify-between items-center text-xs font-bold text-emerald-900 pt-1">
               <span>Total Ayam Delta:</span>
               <span id="displayDeltaTotal" class="bg-emerald-100 px-2.5 py-0.5 rounded-lg border border-emerald-300">0 Ekor</span>
             </div>
           </div>
-
         </div>
 
-        <!-- Submit Button -->
         <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-amber-600/20 active:scale-[0.99] transition-all flex items-center justify-center gap-2 text-sm">
           <i class="fa-solid fa-cloud-arrow-up text-amber-200"></i>
           <span id="btnSubmitText">Kalkulasi & Simpan ke Database</span>
@@ -359,7 +299,7 @@
       </form>
     </div>
 
-    <!-- 2. HASIL ANALISIS ORDER SECTION (DENGAN TAMBAHAN PROPORSI % SUPPLIER) -->
+    <!-- 2. HASIL ANALISIS ORDER SECTION -->
     <div id="analysisSection" class="bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-8 relative space-y-6">
       <div class="flex items-center justify-between pb-4 border-b border-slate-100">
         <div>
@@ -371,7 +311,6 @@
         <span id="statusBadge" class="hidden text-xs font-extrabold px-3 py-1 rounded-full border"></span>
       </div>
 
-      <!-- Summary Metric Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-blue-50/60 border border-blue-200/80 rounded-2xl p-4">
           <span class="text-[11px] font-bold text-blue-900 uppercase tracking-wider block">Marinade Terpakai</span>
@@ -385,7 +324,6 @@
           <span class="text-[10px] text-slate-400 font-medium">Target Spare: 6-8 Pack</span>
         </div>
 
-        <!-- Highlight Order Box -->
         <div id="orderHighlightBox" class="bg-gradient-to-br from-amber-500 to-amber-700 text-white rounded-2xl p-4 shadow-md text-center flex flex-col justify-center">
           <span class="text-[11px] font-bold text-amber-100 uppercase tracking-widest block">Rekomendasi Order Marinade Japfa</span>
           <div class="text-3xl font-black my-0.5" id="resOrderDus">0 DUS</div>
@@ -393,43 +331,28 @@
         </div>
       </div>
 
-      <!-- PENAMBAHAN ANALISIS PERSENTASE 3 SUPPLIER STORE DILAPORKAN -->
+      <!-- PERSENTASE SUPPLIER ANALISIS STORE -->
       <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3">
         <span class="text-xs font-extrabold text-slate-800 uppercase tracking-wider block flex items-center gap-1.5">
           <i class="fa-solid fa-chart-pie text-amber-600"></i> Persentase Orderan Ayam 3 Supplier Store Ini
         </span>
-
         <div class="grid grid-cols-3 gap-2 text-center">
-          <!-- JAPFA PCT -->
           <div class="bg-blue-100/70 border border-blue-200 rounded-xl p-2.5">
             <span class="text-[10px] font-bold text-blue-900 uppercase block">Japfa</span>
             <div id="resJapfaQty" class="text-xs font-black text-blue-900 mt-0.5">0 ekor</div>
             <span id="resJapfaPct" class="text-xs font-black text-blue-700 bg-white px-2 py-0.5 rounded-md mt-1 inline-block border border-blue-200">0%</span>
           </div>
-
-          <!-- AFCO PCT -->
           <div class="bg-amber-100/70 border border-amber-200 rounded-xl p-2.5">
             <span class="text-[10px] font-bold text-amber-900 uppercase block">Afco</span>
             <div id="resAfcoQty" class="text-xs font-black text-amber-900 mt-0.5">0 ekor</div>
             <span id="resAfcoPct" class="text-xs font-black text-amber-800 bg-white px-2 py-0.5 rounded-md mt-1 inline-block border border-amber-200">0%</span>
           </div>
-
-          <!-- DELTA PCT -->
           <div class="bg-emerald-100/70 border border-emerald-200 rounded-xl p-2.5">
             <span class="text-[10px] font-bold text-emerald-900 uppercase block">Delta</span>
             <div id="resDeltaQty" class="text-xs font-black text-emerald-900 mt-0.5">0 ekor</div>
             <span id="resDeltaPct" class="text-xs font-black text-emerald-800 bg-white px-2 py-0.5 rounded-md mt-1 inline-block border border-emerald-200">0%</span>
           </div>
         </div>
-      </div>
-
-      <!-- Rule info -->
-      <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-200/60 space-y-1.5 text-xs text-amber-900/90 font-medium">
-        <div class="flex items-center gap-1.5 font-bold text-amber-900">
-          <i class="fa-solid fa-circle-info text-amber-600"></i> Ketentuan Bumbu Marinade
-        </div>
-        <p>• Kebutuhan bumbu marinade <strong>hanya dihitung dari akumulasi Ayam Japfa</strong>.</p>
-        <p>• Jika Sisa Stok Japfa <strong>&lt; 8 pack</strong> $\rightarrow$ Otomatis merekomendasikan <strong>Order 1 Dus (20 Pack)</strong>.</p>
       </div>
     </div>
 
@@ -438,35 +361,33 @@
       <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-100 pb-4">
         <div>
           <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-database text-amber-600"></i> Database Order Ayam & Marinade (Live Global)
+            <i class="fa-solid fa-database text-amber-600"></i> Database Order Ayam & Marinade
           </h2>
-          <p class="text-xs text-slate-400 mt-0.5">Tersimpan permanen & diperbarui otomatis dari seluruh pengguna</p>
+          <p class="text-xs text-slate-400 mt-0.5">Tersimpan per sheet tahun di Google Sheets</p>
         </div>
 
-        <!-- INPUT PENCARIAN STORE & ACTION BUTTONS -->
         <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full md:w-auto">
-          <!-- Live Search Input -->
-          <div class="relative w-full sm:w-64">
-            <input type="text" id="searchStoreInput" oninput="renderRecapTable()" placeholder="Cari nama store..." 
-                   class="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500 shadow-sm">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+          <!-- Filter Tahun Database -->
+          <select id="filterYearSelect" onchange="fetchCloudData()" class="bg-slate-100 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 shadow-sm">
+            <option value="2026" selected>Tahun 2026</option>
+            <option value="2027">Tahun 2027</option>
+            <option value="2028">Tahun 2028</option>
+          </select>
+
+          <!-- Search Input -->
+          <div class="relative w-full sm:w-48">
+            <input type="text" id="searchStoreInput" oninput="renderRecapTable()" placeholder="Cari store..." class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800 focus:bg-white focus:ring-2 focus:ring-amber-500 shadow-sm">
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
           </div>
 
           <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <button onclick="fetchCloudData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl border border-slate-200 transition-all">
-              <i class="fa-solid fa-rotate mr-1 text-slate-500"></i>Refresh Live
-            </button>
-            <button onclick="exportToExcelFormatted()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-2 transition-all shadow-md shadow-emerald-600/10 whitespace-nowrap">
-              <i class="fa-solid fa-file-excel"></i> Excel (.xlsx)
-            </button>
-            <button onclick="triggerResetWithPin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3.5 py-2 rounded-xl border border-rose-200 transition-all flex items-center gap-1">
-              <i class="fa-solid fa-lock text-[10px]"></i> <i class="fa-solid fa-trash-can mr-1"></i>Reset
-            </button>
+            <button onclick="fetchCloudData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-xl border border-slate-200"><i class="fa-solid fa-rotate text-slate-500"></i></button>
+            <button onclick="exportToExcelFormatted()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow-md"><i class="fa-solid fa-file-excel mr-1"></i>Excel</button>
+            <button onclick="triggerResetWithPin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs px-3 py-2 rounded-xl border border-rose-200"><i class="fa-solid fa-trash-can"></i></button>
           </div>
         </div>
       </div>
 
-      <!-- Table Container -->
       <div class="overflow-x-auto custom-scrollbar">
         <table class="w-full text-left text-xs border-collapse">
           <thead>
@@ -485,24 +406,21 @@
               <th class="p-3.5 text-center rounded-r-xl">Aksi</th>
             </tr>
           </thead>
-          <tbody id="recapTableBody" class="divide-y divide-slate-100 font-medium">
-            <!-- Dynamic Rows -->
-          </tbody>
+          <tbody id="recapTableBody" class="divide-y divide-slate-100 font-medium"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- 4. WIDGET PALING BAWAH: DASHBOARD REKAP BULANAN & DIAGRAM LINGKARAN (PIE CHART) -->
+    <!-- 4. DASHBOARD REKAP BULANAN -->
     <div id="bottomSummaryWidget" class="bg-white rounded-3xl card-shadow border border-slate-200/80 p-6 sm:p-8 space-y-6">
       <div class="border-b border-slate-100 pb-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
           <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-chart-pie text-amber-600"></i> Rekapitulasi & Diagram Persentase Bulanan
+            <i class="fa-solid fa-chart-pie text-amber-600"></i> Rekapitulasi & Diagram Bulanan
           </h2>
-          <p class="text-xs text-slate-400 mt-0.5">Pilih periode bulan untuk menampilkan visualisasi diagram lingkaran dan total komulatif store</p>
+          <p class="text-xs text-slate-400 mt-0.5">Visualisasi proporsi order per bulan</p>
         </div>
 
-        <!-- FILTER BULAN SINKRON -->
         <div class="flex items-center gap-2 w-full md:w-auto">
           <label class="text-xs font-bold text-slate-700 whitespace-nowrap"><i class="fa-solid fa-filter text-amber-500 mr-1"></i>Pilih Bulan:</label>
           <select id="filterMonthSelect" onchange="renderRecapTable(); renderMonthlyDashboard();" class="bg-amber-50/70 border border-amber-300 rounded-2xl px-3.5 py-2 text-xs font-bold text-amber-950 focus:bg-white focus:ring-2 focus:ring-amber-500 w-full md:w-60 shadow-sm">
@@ -516,17 +434,14 @@
             <option value="Juli">Juli</option>
             <option value="Agustus">Agustus</option>
             <option value="September">September</option>
-            <option value="Oktober">Oktober</option>
-            <option value="November" selected>November</option>
+            <option value="Oktober" selected>Oktober</option>
+            <option value="November">November</option>
             <option value="Desember">Desember</option>
           </select>
         </div>
       </div>
 
-      <!-- DASHBOARD KONTEN BULANAN (PIE CHART & STATS CARDS) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        
-        <!-- DIAGRAM LINGKARAN (PIE CHART) CONTAINER -->
         <div class="lg:col-span-5 bg-slate-50/80 border border-slate-200/80 p-6 rounded-3xl flex flex-col items-center justify-center relative min-h-[300px]">
           <h3 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <i class="fa-solid fa-chart-pie text-blue-600"></i> Persentase Supplier (<span id="pieMonthLabel">Bulan</span>)
@@ -536,7 +451,6 @@
           </div>
         </div>
 
-        <!-- METRIK KOMULATIF STORE DETAIL -->
         <div class="lg:col-span-7 space-y-4">
           <div class="flex justify-between items-center">
             <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Total Komulatif Seluruh Store</span>
@@ -544,8 +458,6 @@
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            
-            <!-- TOTAL ALL AYAM -->
             <div class="col-span-2 sm:col-span-3 bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 rounded-2xl shadow-md flex justify-between items-center">
               <div>
                 <span class="text-[11px] font-bold text-amber-300 uppercase block">Total Komulatif Order Ayam</span>
@@ -556,35 +468,29 @@
               </div>
             </div>
 
-            <!-- JAPFA -->
             <div class="bg-blue-50/80 border border-blue-200 rounded-2xl p-3.5">
               <span class="text-[10px] font-bold text-blue-900 uppercase">Japfa (Ekor)</span>
               <div id="monthlyJapfaQty" class="text-lg font-black text-blue-900 mt-1">0</div>
               <span id="monthlyJapfaPct" class="text-[10px] font-bold text-blue-700">0% Proporsi</span>
             </div>
 
-            <!-- AFCO -->
             <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-3.5">
               <span class="text-[10px] font-bold text-amber-900 uppercase">Afco (Ekor)</span>
               <div id="monthlyAfcoQty" class="text-lg font-black text-amber-900 mt-1">0</div>
               <span id="monthlyAfcoPct" class="text-[10px] font-bold text-amber-700">0% Proporsi</span>
             </div>
 
-            <!-- DELTA -->
             <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3.5">
               <span class="text-[10px] font-bold text-emerald-900 uppercase">Delta (Ekor)</span>
               <div id="monthlyDeltaQty" class="text-lg font-black text-emerald-900 mt-1">0</div>
               <span id="monthlyDeltaPct" class="text-[10px] font-bold text-emerald-700">0% Proporsi</span>
             </div>
 
-            <!-- STOK AWAL MARINADE (PACK) -->
             <div class="col-span-1 sm:col-span-1.5 bg-amber-500/10 border border-amber-300 rounded-2xl p-3.5">
               <span class="text-[10px] font-bold text-amber-900 uppercase block">Stok Awal Marinade</span>
               <div id="monthlyStokAwalPack" class="text-lg font-black text-amber-950 mt-1">0 PACK</div>
-              <span class="text-[9px] text-amber-700 font-medium">Satuan Pack Terinput</span>
             </div>
 
-            <!-- REKOMENDASI ORDER MARINADE (DUS) -->
             <div class="col-span-1 sm:col-span-2 bg-amber-600 text-white rounded-2xl p-3.5 shadow-sm flex flex-col justify-between">
               <div>
                 <span class="text-[10px] font-bold text-amber-100 uppercase block">Total Order Marinade Japfa</span>
@@ -592,12 +498,9 @@
               </div>
               <span id="monthlyOrderPack" class="text-[10px] text-amber-200 font-semibold">(0 Pack Marinade)</span>
             </div>
-
           </div>
         </div>
-
       </div>
-
     </div>
 
   </main>
@@ -615,6 +518,8 @@
       return localStorage.getItem('appAdminPin_v1') || "1234";
     }
 
+    const MONTHS_LIST = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+
     const MARINADE_STORE_DATA = [
       {"name": "AGS JOMBANG PLOSO", "stokAwal": 26, "ayamAwal": 280},
       {"name": "AGS PASURUAN indragiri", "stokAwal": 16, "ayamAwal": 160},
@@ -622,98 +527,80 @@
       {"name": "AGS JOMBANG MOJOAGUNG", "stokAwal": 10, "ayamAwal": 280},
       {"name": "AGS PASURUAN BUGUL", "stokAwal": 16, "ayamAwal": 160},
       {"name": "AGS JEMBER BALUNG", "stokAwal": 12, "ayamAwal": 160},
-      {"name": "AGS JOMBANG RE", "stokAwal": 10, "ayamAwal": 280},
-      {"name": "AGS PASURUAN GONDANG WETAN", "stokAwal": 8, "ayamAwal": 160},
-      {"name": "AGS JEMBER PUGER", "stokAwal": 34, "ayamAwal": 0},
-      {"name": "AGS JOMBANG H.A", "stokAwal": 10, "ayamAwal": 280},
-      {"name": "AGS PASURUAN PANGSUD 2", "stokAwal": 20, "ayamAwal": 160},
-      {"name": "AGS JEMBER KARIMATA", "stokAwal": 20, "ayamAwal": 80},
-      {"name": "AGS JOMBANG DR SUTOMO", "stokAwal": 10, "ayamAwal": 280},
-      {"name": "AGS PASURUAN BANGIL", "stokAwal": 8, "ayamAwal": 80},
-      {"name": "AGS JEMBER MASTRIP", "stokAwal": 2, "ayamAwal": 80},
-      {"name": "AGS JOMBANG adityawarman", "stokAwal": 10, "ayamAwal": 300},
-      {"name": "AGS WARUNG DOWO PASURUAN", "stokAwal": 18, "ayamAwal": 160},
-      {"name": "AGS JEMBER KALISAT", "stokAwal": 20, "ayamAwal": 80},
-      {"name": "AGS TAMBAKREJO jombang", "stokAwal": 26, "ayamAwal": 200},
-      {"name": "AGS WONOREJO PASURUAN", "stokAwal": 8, "ayamAwal": 80},
-      {"name": "AGS BONDOWOSO", "stokAwal": 34, "ayamAwal": 80},
-      {"name": "AGS KALITENGAH pandaan", "stokAwal": 8, "ayamAwal": 100},
-      {"name": "AGS LUMAJANG PASIRIAN", "stokAwal": 16, "ayamAwal": 340},
-      {"name": "AGS PAHLAWAN", "stokAwal": 14, "ayamAwal": 400},
-      {"name": "AGS PASURUAN GUNUNG GANGSIR", "stokAwal": 4, "ayamAwal": 80},
-      {"name": "AGS LUMAJANG GHOZALI", "stokAwal": 74, "ayamAwal": 210},
-      {"name": "AGS HAYAM WURUK", "stokAwal": 14, "ayamAwal": 300},
-      {"name": "AGS GRESIK CERME lamongan", "stokAwal": 24, "ayamAwal": 0},
-      {"name": "AGS SITUBONDO", "stokAwal": 4, "ayamAwal": 130},
-      {"name": "AGS VETERAN", "stokAwal": 8, "ayamAwal": 500},
-      {"name": "AGS BESUKI", "stokAwal": 12, "ayamAwal": 160},
-      {"name": "AGS DIPONEGORO", "stokAwal": 14, "ayamAwal": 200},
-      {"name": "AGS SEMANDING", "stokAwal": 14, "ayamAwal": 200},
-      {"name": "AGS KALIJOGO", "stokAwal": 20, "ayamAwal": 400},
-      {"name": "AGS BALEN", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS BAURNO", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS SROYO", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS PONCO", "stokAwal": 16, "ayamAwal": 240},
-      {"name": "AGS VETERAN bojonegoro", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS GIANT bojonegoro", "stokAwal": 16, "ayamAwal": 200},
-      {"name": "AGS POLIM bojonegoro", "stokAwal": 16, "ayamAwal": 200},
-      {"name": "AGS DANDER bojonegoro", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS NGANJUK", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS NGANJUK BREBEK", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS NGANJUK A.YANI", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS AR.SALEH NGANJUK", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS PONOROGO", "stokAwal": 20, "ayamAwal": 200},
       {"name": "AGS MAGETAN jl.panglima sudirman", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS MAGETAN monginsidi", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS MADIUN MARHADI", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS MAGETAN mt haryono", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS MAGETAN temboro", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS SUNAN DRAJAT lamongan", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS VETERAN lamongan", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS BABAT gotongroyong", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS Tulangan Sidoarjo", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS BANARAN babat", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS WIDANG tuban", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS TANGGULREJO babat", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS BEJI TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS NGUNUT TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS TEUKU UMAR TULUNGAGUNG", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS WATES KEDIRI", "stokAwal": 20, "ayamAwal": 200},
-      {"name": "AGS MOJOKERTO MERI", "stokAwal": 20, "ayamAwal": 200}
+      {"name": "AGS NGANJUK A.YANI", "stokAwal": 20, "ayamAwal": 200}
     ];
 
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwa603zBWU-r_y56EvWqyUA9FCKc084ZcYD4607UNz3E7oiW2IUoCGGcG6YbHvpYqXUSg/exec";
 
     let currentUser = JSON.parse(localStorage.getItem('currentUser_v14') || 'null');
     let columnCounts = { japfa: 4, afco: 4, delta: 4 };
-    let marinadeOrdersList = JSON.parse(localStorage.getItem('marinadeOrdersData_v14') || '[]');
+    let marinadeOrdersList = [];
     let supplierPieChartInstance = null;
-
     let pendingAction = null; 
 
     function cleanMonthName(rawMonth) {
       if(!rawMonth) return "";
-      const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-      for (let m of months) {
+      for (let m of MONTHS_LIST) {
         if (rawMonth.toLowerCase().includes(m.toLowerCase())) return m;
       }
       return rawMonth.trim();
     }
 
+    // LOGIKA PEMBATASAN INPUT UNTUK 2 BULAN KE DEPAN
+    function updateMonthLimits() {
+      const selectedYear = parseInt(document.getElementById("inputYear").value);
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonthIndex = now.getMonth(); // 0 = Jan, 9 = Okt
+
+      const monthSelect = document.getElementById("inputMonth");
+      monthSelect.innerHTML = "";
+
+      MONTHS_LIST.forEach((m, idx) => {
+        const option = document.createElement("option");
+        option.value = m;
+        option.textContent = m;
+
+        // Jika tahun input sama dengan tahun saat ini, kunci bulan di luar range (currentMonth s/d currentMonth + 2)
+        if (selectedYear === currentYear) {
+          const maxAllowedMonthIndex = currentMonthIndex + 2;
+          if (idx < currentMonthIndex || idx > maxAllowedMonthIndex) {
+            option.disabled = true;
+            option.textContent += " (Terkunci)";
+          }
+        } else if (selectedYear < currentYear) {
+          option.disabled = true;
+          option.textContent += " (Lewat)";
+        }
+
+        monthSelect.appendChild(option);
+      });
+
+      // Pilih otomatis bulan aktif pertama yang tidak ter-disabled
+      for (let opt of monthSelect.options) {
+        if (!opt.disabled) {
+          monthSelect.value = opt.value;
+          break;
+        }
+      }
+    }
+
+    function syncFilterYearWithForm(yearVal) {
+      const filterYearSelect = document.getElementById("filterYearSelect");
+      if(filterYearSelect) {
+        filterYearSelect.value = yearVal;
+        fetchCloudData();
+      }
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       checkUserLoginStatus();
+      updateMonthLimits();
       renderSupplierInputs('japfa');
       renderSupplierInputs('afco');
       renderSupplierInputs('delta');
       populateDatalist();
-
-      marinadeOrdersList = marinadeOrdersList.map(item => ({
-        ...item,
-        month: cleanMonthName(item.month)
-      }));
-
-      renderRecapTable();
-      renderMonthlyDashboard();
 
       fetchCloudData();
 
@@ -730,20 +617,22 @@
     async function fetchCloudData(isBackground = false) {
       if (!GOOGLE_SCRIPT_URL || !GOOGLE_SCRIPT_URL.includes("script.google.com")) return;
 
+      const selectedYear = document.getElementById("filterYearSelect")?.value || "2026";
+
       try {
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?year=${selectedYear}`, {
           method: "GET",
           redirect: "follow"
         });
 
         if (response.ok) {
           const cloudData = await response.json();
-          if (Array.isArray(cloudData) && cloudData.length > 0) {
+          if (Array.isArray(cloudData)) {
             marinadeOrdersList = cloudData.map(item => ({
               ...item,
               month: cleanMonthName(item.month)
             }));
-            localStorage.setItem('marinadeOrdersData_v14', JSON.stringify(marinadeOrdersList));
+            localStorage.setItem(`marinadeOrdersData_${selectedYear}`, JSON.stringify(marinadeOrdersList));
             renderRecapTable();
             renderMonthlyDashboard();
           }
@@ -800,8 +689,7 @@
         html += `
           <div>
             <span class="text-[9px] text-slate-500 font-bold block text-center">Kirim ${i}</span>
-            <input type="number" id="${supplier}_${i}" min="0" value="${val}" oninput="calculateTotals()" 
-                   class="w-full py-1 px-1 text-xs bg-white border ${colorBorder} rounded text-center font-bold">
+            <input type="number" id="${supplier}_${i}" min="0" value="${val}" oninput="calculateTotals()" class="w-full py-1 px-1 text-xs bg-white border ${colorBorder} rounded text-center font-bold">
           </div>
         `;
       }
@@ -866,16 +754,6 @@
       }
     }
 
-    function syncMonthFilterWithForm(selectedVal) {
-      const cleanVal = cleanMonthName(selectedVal);
-      const selectFilter = document.getElementById("filterMonthSelect");
-      if(selectFilter) {
-        selectFilter.value = cleanVal;
-        renderRecapTable();
-        renderMonthlyDashboard();
-      }
-    }
-
     async function handleFormSubmit(e) {
       e.preventDefault();
       if(!currentUser) { openLoginModal(); return; }
@@ -887,6 +765,7 @@
       btnSubmitText.textContent = "Menyimpan ke Cloud...";
 
       const storeName = document.getElementById("inputStoreName").value.trim();
+      const year = document.getElementById("inputYear").value;
       const rawMonth = document.getElementById("inputMonth").value;
       const month = cleanMonthName(rawMonth);
       const stokAwal = parseInt(document.getElementById("inputStokAwal").value) || 0;
@@ -896,7 +775,6 @@
       const ketDelta = document.getElementById("ket_delta").value.trim() || "-";
 
       const totals = calculateTotals();
-
       const packUsed = Math.ceil(totals.japfaSum / 10);
       const sisaStok = stokAwal - packUsed;
 
@@ -918,7 +796,7 @@
         statusClass = "bg-amber-100 text-amber-800 border-amber-300";
       }
 
-      document.getElementById("resStoreSubtitle").textContent = `${storeName} (${month})`;
+      document.getElementById("resStoreSubtitle").textContent = `${storeName} (${month} ${year})`;
       const badge = document.getElementById("statusBadge");
       badge.textContent = statusText;
       badge.className = `text-xs font-extrabold px-3 py-1 rounded-full border ${statusClass}`;
@@ -929,7 +807,6 @@
       document.getElementById("resOrderDus").textContent = `${orderDus} DUS`;
       document.getElementById("resOrderPack").textContent = `(${orderPack} Pack Marinade)`;
 
-      // HITUNG DAN TAMPILKAN PERSENTASE 3 SUPPLIER DI HASIL ANALISIS STORE
       let pJapfa = 0, pAfco = 0, pDelta = 0;
       if (totals.grandTotal > 0) {
         pJapfa = Math.round((totals.japfaSum / totals.grandTotal) * 100);
@@ -952,6 +829,7 @@
         userJabatan: currentUser.jabatan,
         userPenempatan: currentUser.penempatan,
         storeName: storeName,
+        year: year,
         month: month,
         stokAwal: stokAwal,
         japfaArr: totals.japfaArr,
@@ -975,9 +853,7 @@
       if (existingIdx >= 0) marinadeOrdersList[existingIdx] = newRecord;
       else marinadeOrdersList.unshift(newRecord);
 
-      localStorage.setItem('marinadeOrdersData_v14', JSON.stringify(marinadeOrdersList));
-      
-      syncMonthFilterWithForm(month);
+      localStorage.setItem(`marinadeOrdersData_${year}`, JSON.stringify(marinadeOrdersList));
 
       if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes("script.google.com")) {
         try {
@@ -1019,7 +895,7 @@
           <tr>
             <td colspan="12" class="p-8 text-center text-slate-400 font-medium">
               <i class="fa-solid fa-box-open text-3xl mb-2 block text-slate-300"></i>
-              Tidak ada data yang cocok dengan kriteria pencarian/filter.
+              Tidak ada data yang cocok untuk filter tahun/bulan/pencarian ini.
             </td>
           </tr>
         `;
@@ -1045,7 +921,7 @@
             <td class="p-3.5 text-center font-black ${item.sisaStok < 8 ? 'text-rose-600' : 'text-slate-800'}">${item.sisaStok || 0}</td>
             <td class="p-3.5 text-center font-black text-amber-900 bg-amber-100">${item.orderDus || 0} DUS (${item.orderPack || 0} pck)</td>
             <td class="p-3.5 text-center">
-              <button onclick="triggerDeleteWithPin(${item.id})" class="text-slate-400 hover:text-rose-600 p-1 rounded-lg transition-colors" title="Hapus Manual Data Ini (Butuh PIN Admin)">
+              <button onclick="triggerDeleteWithPin(${item.id})" class="text-slate-400 hover:text-rose-600 p-1 rounded-lg transition-colors">
                 <i class="fa-solid fa-lock text-[9px] mr-0.5 text-slate-300"></i><i class="fa-solid fa-trash-can"></i>
               </button>
             </td>
@@ -1103,38 +979,22 @@
       document.getElementById("monthlyOrderPack").textContent = `(${mOrderPack.toLocaleString('id-ID')} Pack Marinade)`;
 
       const ctx = document.getElementById('supplierPieChart').getContext('2d');
-
-      if (supplierPieChartInstance) {
-        supplierPieChartInstance.destroy();
-      }
+      if (supplierPieChartInstance) supplierPieChartInstance.destroy();
 
       const chartData = (mTotalAyam === 0) ? [1, 1, 1] : [mJapfa, mAfco, mDelta];
-      const bgColors = (mTotalAyam === 0) 
-        ? ['#cbd5e1', '#e2e8f0', '#f1f5f9'] 
-        : ['#2563eb', '#f59e0b', '#10b981'];
+      const bgColors = (mTotalAyam === 0) ? ['#cbd5e1', '#e2e8f0', '#f1f5f9'] : ['#2563eb', '#f59e0b', '#10b981'];
 
       supplierPieChartInstance = new Chart(ctx, {
         type: 'pie',
         data: {
           labels: ['Japfa', 'Afco', 'Delta'],
-          datasets: [{
-            data: chartData,
-            backgroundColor: bgColors,
-            borderWidth: 2,
-            borderColor: '#ffffff'
-          }]
+          datasets: [{ data: chartData, backgroundColor: bgColors, borderWidth: 2, borderColor: '#ffffff' }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: true,
           plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
-                padding: 15
-              }
-            },
+            legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' }, padding: 15 } },
             tooltip: {
               callbacks: {
                 label: function(context) {
@@ -1159,9 +1019,7 @@
       document.getElementById("inputOldPin").focus();
     }
 
-    function closeChangePinModal() {
-      document.getElementById("changePinModal").classList.add("hidden");
-    }
+    function closeChangePinModal() { document.getElementById("changePinModal").classList.add("hidden"); }
 
     function handleChangePinSubmit(e) {
       e.preventDefault();
@@ -1169,7 +1027,6 @@
       const newPin = document.getElementById("inputNewPin").value;
       const confirmPin = document.getElementById("inputConfirmPin").value;
       const errorText = document.getElementById("changePinErrorText");
-
       const currentAdminPin = getStoredAdminPin();
 
       if (oldPin !== currentAdminPin) {
@@ -1177,13 +1034,11 @@
         errorText.classList.remove("hidden");
         return;
       }
-
       if (newPin !== confirmPin) {
         errorText.textContent = "Konfirmasi PIN Baru Tidak Cocok!";
         errorText.classList.remove("hidden");
         return;
       }
-
       if (newPin.trim().length < 4) {
         errorText.textContent = "PIN Minimal 4 Karakter!";
         errorText.classList.remove("hidden");
@@ -1226,12 +1081,8 @@
 
       if (enteredPin === currentAdminPin) {
         document.getElementById("pinModal").classList.add("hidden");
-        
-        if (pendingAction && pendingAction.type === 'delete') {
-          executeDeleteRecord(pendingAction.id);
-        } else if (pendingAction && pendingAction.type === 'reset') {
-          executeClearAllData();
-        }
+        if (pendingAction && pendingAction.type === 'delete') executeDeleteRecord(pendingAction.id);
+        else if (pendingAction && pendingAction.type === 'reset') executeClearAllData();
         pendingAction = null;
       } else {
         document.getElementById("pinErrorText").classList.remove("hidden");
@@ -1241,21 +1092,24 @@
     }
 
     function executeDeleteRecord(id) {
+      const selectedYear = document.getElementById("filterYearSelect")?.value || "2026";
       marinadeOrdersList = marinadeOrdersList.filter(i => i.id !== id);
-      localStorage.setItem('marinadeOrdersData_v14', JSON.stringify(marinadeOrdersList));
+      localStorage.setItem(`marinadeOrdersData_${selectedYear}`, JSON.stringify(marinadeOrdersList));
       renderRecapTable();
       renderMonthlyDashboard();
     }
 
     function executeClearAllData() {
+      const selectedYear = document.getElementById("filterYearSelect")?.value || "2026";
       marinadeOrdersList = [];
-      localStorage.removeItem('marinadeOrdersData_v14');
+      localStorage.removeItem(`marinadeOrdersData_${selectedYear}`);
       renderRecapTable();
       renderMonthlyDashboard();
     }
 
     function exportToExcelFormatted() {
       if (marinadeOrdersList.length === 0) { alert("Database masih kosong!"); return; }
+      const selectedYear = document.getElementById("filterYearSelect")?.value || "2026";
 
       let maxJapfaCols = 4, maxAfcoCols = 4, maxDeltaCols = 4;
       marinadeOrdersList.forEach(item => {
@@ -1271,6 +1125,7 @@
           "Jabatan Pengisi": item.userJabatan || "-",
           "Penempatan Store": item.userPenempatan || "-",
           "Nama Store": item.storeName,
+          "Tahun": item.year,
           "Periode Bulan": cleanMonthName(item.month),
           "Stok Awal Marinade (Pack)": item.stokAwal
         };
@@ -1299,8 +1154,8 @@
 
       const worksheet = XLSX.utils.json_to_sheet(excelData);
       const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Database Order");
-      XLSX.writeFile(workbook, "Rekap_Database_Monitoring_Order_Ayam.xlsx");
+      XLSX.utils.book_append_sheet(workbook, worksheet, `Database_${selectedYear}`);
+      XLSX.writeFile(workbook, `Rekap_Database_Monitoring_Order_Ayam_${selectedYear}.xlsx`);
     }
   </script>
 </body>
